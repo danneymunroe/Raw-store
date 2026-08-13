@@ -390,8 +390,7 @@ if __name__ == '__main__':
     tg_app.add_handler(CommandHandler('edit', edit_product))
     tg_app.add_handler(CommandHandler('inventory', inventory))
     tg_app.add_handler(CommandHandler('blast', blast))
-    
-    # Receive data from WebApp
+        # Receive data from WebApp
     tg_app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, web_app_data_handler))
     
     # Route support bridge messages
@@ -399,4 +398,5 @@ if __name__ == '__main__':
 
     print("Bot is live. Waiting for users...")
     tg_app.run_polling()
+
 
