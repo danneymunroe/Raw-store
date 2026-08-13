@@ -41,8 +41,7 @@
         body::before {
             content: "RAW";
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             font-family: var(--sans);
             font-size: 40vw;
@@ -61,36 +60,12 @@
             padding: 1.2rem 2rem; 
             border-bottom: 2px solid var(--border); 
             background-color: var(--bg);
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            position: sticky; top: 0; z-index: 50;
         }
 
-        header .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: -1.5px;
-            line-height: 1;
-        }
-
-        header .slogan {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        header .admin-link { 
-            text-align: right; 
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            font-weight: 800;
-            cursor: pointer; 
-            text-decoration: underline; 
-            color: var(--red);
-            text-transform: uppercase;
-        }
+        header .logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
+        header .slogan { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        header .admin-link { text-align: right; font-family: var(--mono); font-size: 0.75rem; font-weight: 800; cursor: pointer; text-decoration: underline; color: var(--red); text-transform: uppercase; }
 
         /* ANNOUNCEMENT STRIP */
         .announcement { 
@@ -104,8 +79,7 @@
             gap: 1rem; 
             text-transform: uppercase; 
             background: #ffffff;
-            position: relative;
-            z-index: 10;
+            position: relative; z-index: 10;
         }
 
         .status-dot { 
@@ -115,10 +89,23 @@
             display: inline-block; 
             animation: pulse 1.8s infinite; 
         }
-
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
-        /* UPGRADE: INTERACTIVE SMOOTHLY PULSING KILL SHOT BANNER */
+        /* UPGRADE: TIME DECAY TIMELINE */
+        .timeline-container {
+            padding: 0.5rem 2rem;
+            border-bottom: 2px solid var(--border);
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            font-weight: 800;
+            background: var(--bg);
+            position: relative; z-index: 10;
+        }
+        .timeline-label { display: flex; justify-content: space-between; margin-bottom: 0.3rem; text-transform: uppercase; }
+        .timeline-bar { width: 100%; height: 8px; border: 2px solid var(--border); background: #ffffff; position: relative; }
+        .timeline-fill { height: 100%; background: var(--black); width: 0%; transition: width 0.5s ease-out; }
+
+        /* KILL SHOT BANNER */
         .killshot-banner {
             background: var(--black);
             color: var(--bg);
@@ -131,396 +118,75 @@
             align-items: center;
             cursor: pointer;
             border-bottom: 2px solid var(--border);
-            position: relative;
-            z-index: 10;
+            position: relative; z-index: 10;
             text-transform: uppercase;
             animation: smoothPulse 3s ease-in-out infinite;
             transition: background-color 0.2s ease;
         }
-
-        .killshot-banner:hover {
-            background-color: var(--red);
-        }
-
-        .killshot-text {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .info-icon {
-            font-size: 1.1rem;
-            font-weight: bold;
-            font-family: var(--sans);
-        }
-
-        @keyframes smoothPulse {
-            0% { opacity: 0.95; }
-            50% { opacity: 1; }
-            100% { opacity: 0.95; }
-        }
+        .killshot-banner:hover { background-color: var(--red); }
+        .killshot-text { display: flex; align-items: center; gap: 0.5rem; }
+        .info-icon { font-size: 1.1rem; font-weight: bold; font-family: var(--sans); }
+        @keyframes smoothPulse { 0% { opacity: 0.95; } 50% { opacity: 1; } 100% { opacity: 0.95; } }
 
         /* PRODUCT GRID */
-        main.grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            border-bottom: 2px solid var(--border); 
-            position: relative;
-            z-index: 10;
-        }
-
-        .card { 
-            display: flex; 
-            flex-direction: column; 
-            border-right: 2px solid var(--border); 
-            border-bottom: 2px solid var(--border); 
-            cursor: pointer; 
-            position: relative; 
-            background-color: var(--bg);
-            transition: background-color 0.2s ease;
-        }
-
+        main.grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--border); position: relative; z-index: 10; }
+        .card { display: flex; flex-direction: column; border-right: 2px solid var(--border); border-bottom: 2px solid var(--border); cursor: pointer; position: relative; background-color: var(--bg); }
         .card:nth-child(even) { border-right: none; }
         .card:nth-last-child(1), .card:nth-last-child(2) { border-bottom: none; }
+        .img-wrapper { position: relative; overflow: hidden; background: #ffffff; flex-grow: 1; display: flex; align-items: center; justify-content: center; aspect-ratio: 4/5; padding: 1.5rem; border-bottom: 2px solid var(--border); }
+        .card.gone .img-wrapper img { opacity: 0.15; filter: grayscale(100%); }
+        .stamp { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-12deg); color: var(--red); border: 4px solid var(--red); padding: 0.4rem 1.2rem; font-family: var(--sans); font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; pointer-events: none; z-index: 10; background: rgba(247, 246, 242, 0.9); }
+        .card img { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; height: 100%; object-fit: contain; }
+        .card:hover:not(.gone) img { transform: scale(1.06); }
 
-        .img-wrapper { 
-            position: relative; 
-            overflow: hidden; 
-            background: #ffffff; 
-            flex-grow: 1; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            aspect-ratio: 4/5; 
-            padding: 1.5rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .card.gone .img-wrapper img { 
-            opacity: 0.15; 
-            filter: grayscale(100%); 
-        }
-
-        .stamp { 
-            position: absolute; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) rotate(-12deg); 
-            color: var(--red); 
-            border: 4px solid var(--red); 
-            padding: 0.4rem 1.2rem; 
-            font-family: var(--sans);
-            font-size: 2.5rem; 
-            font-weight: 900; 
-            letter-spacing: 3px; 
-            pointer-events: none; 
-            z-index: 10; 
-            background: rgba(247, 246, 242, 0.9);
-        }
-
-        .card img { 
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
-            width: 100%; 
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .card:hover:not(.gone) img { 
-            transform: scale(1.06); 
-        }
-
-        /* BRUTALIST SCARCITY BAR */
-        .scarcity-meter {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: var(--black);
-            margin-top: 0.3rem;
-            letter-spacing: 0.5px;
-        }
-        
-        /* CARD FOOTER */
-        .card-footer { 
-            padding: 1.2rem 1.5rem; 
-            background-color: var(--bg); 
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-        }
-
-        .card-title { 
-            font-family: var(--sans);
-            font-weight: 900; 
-            font-size: 1.15rem; 
-            text-transform: uppercase; 
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-        }
-
-        .card-meta { 
-            font-family: var(--mono); 
-            font-size: 0.8rem; 
-            font-weight: 700;
-            display: flex; 
-            justify-content: space-between; 
-            text-transform: uppercase; 
-        }
-
-        .card-state { 
-            font-family: var(--mono); 
-            font-size: 0.75rem; 
-            font-weight: 700;
-            display: flex; 
-            justify-content: space-between; 
-            color: var(--dim); 
-            text-transform: uppercase; 
-        }
-
+        .scarcity-meter { font-family: var(--mono); font-size: 0.7rem; font-weight: 800; color: var(--black); margin-top: 0.3rem; letter-spacing: 0.5px; }
+        .card-footer { padding: 1.2rem 1.5rem; background-color: var(--bg); display: flex; flex-direction: column; gap: 0.3rem; }
+        .card-title { font-family: var(--sans); font-weight: 900; font-size: 1.15rem; text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.1; }
+        .card-meta { font-family: var(--mono); font-size: 0.8rem; font-weight: 700; display: flex; justify-content: space-between; text-transform: uppercase; }
+        .card-state { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; display: flex; justify-content: space-between; color: var(--dim); text-transform: uppercase; }
         .locked-by-text { color: var(--red); font-weight: 800; }
 
         /* MODAL */
-        .modal { 
-            position: fixed; 
-            inset: 0; 
-            background: var(--bg); 
-            z-index: 100; 
-            display: none; 
-            flex-direction: column; 
-            overflow-y: auto; 
-            padding-bottom: 90px; 
-        }
+        .modal { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: none; flex-direction: column; overflow-y: auto; padding-bottom: 90px; }
+        .modal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; padding: 2.5rem 3rem; max-width: 1300px; margin: 0 auto; width: 100%; }
+        .modal-img { border: 2px solid var(--border); background: #ffffff; padding: 2.5rem; display: flex; align-items: center; justify-content: center; aspect-ratio: 4/5; }
+        .modal-img img { width: 100%; height: 100%; object-fit: contain; }
+        .m-title { font-family: var(--sans); font-size: 2.8rem; font-weight: 900; line-height: 0.95; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: -1px; }
+        .m-meta { font-family: var(--mono); font-size: 1rem; font-weight: 700; margin-bottom: 1.5rem; text-transform: uppercase; padding-bottom: 1rem; border-bottom: 2px solid var(--border); }
+        .m-status { font-family: var(--mono); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem; text-transform: uppercase; }
 
-        .modal-body { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 3rem; 
-            padding: 2.5rem 3rem; 
-            max-width: 1300px;
-            margin: 0 auto;
-            width: 100%;
-        }
+        .spec-drawer { border: 2px solid var(--border); margin-bottom: 1.5rem; background: #ffffff; }
+        .spec-drawer-header { padding: 0.8rem 1rem; font-family: var(--mono); font-size: 0.8rem; font-weight: 800; display: flex; justify-content: space-between; cursor: pointer; text-transform: uppercase; background: var(--bg); border-bottom: 1px solid var(--border); }
+        .spec-drawer-content { padding: 1rem; font-family: var(--mono); font-size: 0.75rem; line-height: 1.7; text-transform: uppercase; color: #333; }
 
-        .modal-img { 
-            border: 2px solid var(--border); 
-            background: #ffffff; 
-            padding: 2.5rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            aspect-ratio: 4/5;
-        }
-
-        .modal-img img { 
-            width: 100%; 
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .m-title { 
-            font-family: var(--sans);
-            font-size: 2.8rem; 
-            font-weight: 900; 
-            line-height: 0.95; 
-            margin-bottom: 0.8rem; 
-            text-transform: uppercase; 
-            letter-spacing: -1px;
-        }
-
-        .m-meta { 
-            font-family: var(--mono); 
-            font-size: 1rem; 
-            font-weight: 700;
-            margin-bottom: 1.5rem; 
-            text-transform: uppercase;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .m-status { 
-            font-family: var(--mono); 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            margin-bottom: 1.5rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 0.6rem; 
-            text-transform: uppercase;
-        }
-
-        /* EXPANDABLE GARMENT SPEC DRAWER */
-        .spec-drawer {
-            border: 2px solid var(--border);
-            margin-bottom: 1.5rem;
-            background: #ffffff;
-        }
-
-        .spec-drawer-header {
-            padding: 0.8rem 1rem;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            font-weight: 800;
-            display: flex;
-            justify-content: space-between;
-            cursor: pointer;
-            text-transform: uppercase;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .spec-drawer-content {
-            padding: 1rem;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            line-height: 1.7;
-            text-transform: uppercase;
-            color: #333;
-        }
-
-        .size-label {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-            color: var(--dim);
-        }
-
+        .size-label { font-family: var(--mono); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--dim); }
         .size-selector { display: flex; gap: 0.8rem; margin-bottom: 2rem; }
-        
-        .size-btn { 
-            border: 2px solid var(--border); 
-            background: transparent; 
-            padding: 0.8rem 1.4rem; 
-            font-family: var(--mono); 
-            font-size: 0.9rem; 
-            font-weight: 800;
-            cursor: pointer; 
-            transition: all 0.15s ease;
-        }
-
+        .size-btn { border: 2px solid var(--border); background: transparent; padding: 0.8rem 1.4rem; font-family: var(--mono); font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: all 0.15s ease; }
         .size-btn.active { background: var(--black); color: var(--bg); }
 
-        /* BUTTONS */
         .purchase-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
-        
-        .btn { 
-            padding: 1.2rem; 
-            font-family: var(--sans);
-            font-weight: 900; 
-            font-size: 1.05rem; 
-            text-align: center; 
-            cursor: pointer; 
-            border: 2px solid var(--border); 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
-            transition: transform 0.1s ease;
-        }
-
+        .btn { padding: 1.2rem; font-family: var(--sans); font-weight: 900; font-size: 1.05rem; text-align: center; cursor: pointer; border: 2px solid var(--border); text-transform: uppercase; letter-spacing: 0.5px; transition: transform 0.1s ease; }
         .btn:active { transform: scale(0.98); }
         .btn-buy { background: var(--black); color: var(--bg); }
         .btn-lock { background: transparent; color: var(--red); border-color: var(--red); }
-        
-        .subtext { 
-            font-family: var(--mono); 
-            font-size: 0.7rem; 
-            font-weight: 700;
-            margin-top: 0.5rem; 
-            color: var(--dim); 
-            text-align: center; 
-            text-transform: uppercase;
-        }
+        .subtext { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; margin-top: 0.5rem; color: var(--dim); text-align: center; text-transform: uppercase; }
 
-        /* CHECKOUT FORM IN MODAL */
-        .checkout-form { 
-            display: none; 
-            border-top: 2px solid var(--border); 
-            padding-top: 1.5rem; 
-            margin-top: 1rem; 
-        }
-
-        .form-title { 
-            font-family: var(--sans);
-            font-weight: 900; 
-            font-size: 1.4rem; 
-            margin-bottom: 1.2rem; 
-            text-transform: uppercase; 
-            letter-spacing: -0.5px;
-        }
-
+        .checkout-form { display: none; border-top: 2px solid var(--border); padding-top: 1.5rem; margin-top: 1rem; }
+        .form-title { font-family: var(--sans); font-weight: 900; font-size: 1.4rem; margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: -0.5px; }
         .input-group { margin-bottom: 1.2rem; position: relative; }
-        
-        .input-group label { 
-            display: block; 
-            font-family: var(--mono); 
-            font-size: 0.75rem; 
-            font-weight: 800;
-            margin-bottom: 0.4rem; 
-            text-transform: uppercase;
-            color: var(--black);
-        }
-
-        .input-group input { 
-            width: 100%; 
-            padding: 0.9rem 1rem; 
-            border: 2px solid var(--border); 
-            background: #ffffff; 
-            font-family: var(--mono); 
-            font-size: 0.95rem; 
-            font-weight: 700;
-            outline: none; 
-            color: var(--black);
-            border-radius: 0;
-        }
-
+        .input-group label { display: block; font-family: var(--mono); font-size: 0.75rem; font-weight: 800; margin-bottom: 0.4rem; text-transform: uppercase; color: var(--black); }
+        .input-group input { width: 100%; padding: 0.9rem 1rem; border: 2px solid var(--border); background: #ffffff; font-family: var(--mono); font-size: 0.95rem; font-weight: 700; outline: none; color: var(--black); border-radius: 0; }
         .input-group input:focus { border-color: var(--red); }
         .lock-name-group { display: none; }
-        
-        /* 1-TAP PHONE SHARE BUTTON */
-        .btn-share-phone {
-            position: absolute; 
-            right: 4px; 
-            top: 25px;
-            background: var(--black); 
-            color: var(--bg);
-            border: none; 
-            padding: 0.65rem 0.9rem;
-            font-family: var(--mono); 
-            font-size: 0.7rem;
-            font-weight: 800;
-            cursor: pointer; 
-            text-transform: uppercase;
-        }
+        .btn-share-phone { position: absolute; right: 4px; top: 25px; background: var(--black); color: var(--bg); border: none; padding: 0.65rem 0.9rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .btn-gps-locate { position: absolute; right: 4px; top: 25px; background: var(--black); color: var(--bg); border: none; padding: 0.65rem 0.9rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .btn-story { width: 100%; background: transparent; color: var(--black); border: 2px solid var(--border); padding: 0.9rem; margin-top: 1rem; font-family: var(--mono); font-size: 0.8rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
-        /* UPGRADE: 📍 GPS LOCATOR AUTOFILL BUTTON */
-        .btn-gps-locate {
-            position: absolute;
-            right: 4px;
-            top: 25px;
-            background: var(--black);
-            color: var(--bg);
-            border: none;
-            padding: 0.65rem 0.9rem;
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
+        /* UPGRADE: TICKET PREVIEW ZONE */
+        .ticket-view { display: none; text-align: center; border-top: 2px solid var(--border); padding-top: 1.5rem; margin-top: 1rem; }
+        .ticket-canvas-container { border: 2px solid var(--border); padding: 10px; background: #ffffff; margin-bottom: 1rem; display: inline-block; width: 100%; max-width: 100%; overflow: hidden; }
+        .ticket-canvas-container canvas { width: 100%; height: auto; display: block; }
 
-        .btn-story {
-            width: 100%; 
-            background: transparent; 
-            color: var(--black);
-            border: 2px solid var(--border); 
-            padding: 0.9rem; 
-            margin-top: 1rem;
-            font-family: var(--mono); 
-            font-size: 0.8rem;
-            font-weight: 800; 
-            cursor: pointer; 
-            text-transform: uppercase;
-        }
-
-        /* RESPONSIVE BREAKPOINTS */
         @media (max-width: 900px) {
             header { padding: 1rem 1.2rem; }
             header .logo { font-size: 1.5rem; }
@@ -548,10 +214,21 @@
     <div class="announcement">
         <span class="status-dot"></span> 
         <span>DROP 017 LIVE</span>
-        <span style="margin-left:auto;">16D 04H 21M 09S — THEN GONE</span>
+        <span style="margin-left:auto;" id="main-timer">16D 04H 21M 09S — THEN GONE</span>
     </div>
 
-    <!-- UPGRADE: HIGH CONFIG STATIC BANNER EXPLAINING KILLSHOT -->
+    <!-- UPGRADE: TIME DECAY TIMELINE -->
+    <div class="timeline-container">
+        <div class="timeline-label">
+            <span>TIME DECAY PROGRESSION</span>
+            <span id="timeline-pct">0% ELAPSED</span>
+        </div>
+        <div class="timeline-bar">
+            <div class="timeline-fill" id="timeline-fill"></div>
+        </div>
+    </div>
+
+    <!-- HIGH CONFIG STATIC BANNER EXPLAINING KILLSHOT -->
     <div class="killshot-banner" onclick="showKillshotExplanation()">
         <span class="killshot-text"><span class="status-dot"></span> KILL SHOT ACTIVE: LIMIT EDITION SIZE FOREVER</span>
         <span class="info-icon">🛈 INFO</span>
@@ -573,7 +250,6 @@
                 <div id="main-ui">
                     <div class="m-status"><span class="status-dot"></span> LIVE / AVAILABLE FOR 21 DAYS</div>
                     
-                    <!-- EXPANDABLE GARMENT ARCHITECTURE SPECS -->
                     <div class="spec-drawer">
                         <div class="spec-drawer-header" onclick="toggleSpecDrawer()">
                             <span>GARMENT ARCHITECTURE & SPECS</span>
@@ -631,6 +307,13 @@
                     <button class="btn-story" onclick="shareToStory()">📸 FLEX THIS DROP ON STORY</button>
                 </div>
 
+                <!-- UPGRADE: TICKET DOWNLOAD VIEW -->
+                <div class="ticket-view" id="ticket-view">
+                    <div class="form-title" style="color:var(--red)">TICKET SECURED</div>
+                    <div class="ticket-canvas-container" id="canvas-container"></div>
+                    <button class="btn btn-buy" style="margin-bottom:10px" onclick="downloadTicket()">SAVE TICKET TO DEVICE</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -640,13 +323,11 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // NATIVE COLOR SYNCHRONIZATION
         try {
             tg.setHeaderColor('#f7f6f2');
             tg.setBackgroundColor('#f7f6f2');
         } catch(e) {}
 
-        // HAPTICS HELPER
         const haptic = tg.HapticFeedback;
         function triggerHaptic(type) {
             if (!haptic) return;
@@ -656,7 +337,6 @@
             if (type === 'success') haptic.notificationOccurred('success');
         }
 
-        // SYNTHESIZED HEAVY INDUSTRIAL AUDIO (Web Audio API)
         function playThudSound() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -674,135 +354,86 @@
             } catch(e){}
         }
 
-        // ASK ADMIN DIRECTED TO @xthemalcom
-        function openAdminChat() {
-            triggerHaptic('light');
-            try { 
-                tg.openTelegramLink('https://t.me/xthemalcom'); 
-            } catch(e) { 
-                window.location.href = "https://t.me/xthemalcom";
+        // UPGRADE: HTML5 BRUTALIST CANVAS TICKET GENERATION
+        let generatedTicketBlob = null;
+        function generateTicket(orderData) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 600;
+            canvas.height = 360;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#f7f6f2';
+            ctx.fillRect(0, 0, 600, 360);
+
+            ctx.strokeStyle = '#0d0d0d';
+            ctx.lineWidth = 10;
+            ctx.strokeRect(5, 5, 590, 350);
+
+            ctx.strokeStyle = '#0d0d0d';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([8, 8]);
+            ctx.strokeRect(20, 20, 560, 320);
+            ctx.setLineDash([]);
+
+            ctx.beginPath();
+            ctx.moveTo(20, 100);
+            ctx.lineTo(580, 100);
+            ctx.moveTo(400, 100);
+            ctx.lineTo(400, 340);
+            ctx.strokeStyle = '#0d0d0d';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = '#0d0d0d';
+            ctx.font = 'bold 32px Syne, sans-serif';
+            ctx.fillText('RAW OBJECT TICKET', 40, 70);
+
+            ctx.font = 'bold 13px "JetBrains Mono", monospace';
+            ctx.fillText('PRODUCT ID', 40, 140);
+            ctx.font = '900 24px Syne, sans-serif';
+            ctx.fillText(orderData.id, 40, 175);
+
+            ctx.font = 'bold 13px "JetBrains Mono", monospace';
+            ctx.fillText('SPECIFICATION', 40, 230);
+            ctx.font = '900 24px Syne, sans-serif';
+            ctx.fillText(`SIZE: ${orderData.size}`, 40, 265);
+
+            ctx.font = 'bold 13px "JetBrains Mono", monospace';
+            ctx.fillText('TYPE', 420, 140);
+            ctx.font = 'bold 20px "JetBrains Mono", monospace';
+            ctx.fillText(orderData.type, 420, 175);
+
+            ctx.font = 'bold 13px "JetBrains Mono", monospace';
+            ctx.fillText('PRICE', 420, 230);
+            ctx.font = 'bold 20px "JetBrains Mono", monospace';
+            ctx.fillText(`${orderData.price} BIRR`, 420, 265);
+
+            ctx.save();
+            ctx.translate(460, 60);
+            ctx.rotate(-Math.PI / 15);
+            ctx.fillStyle = '#e60000';
+            ctx.strokeStyle = '#e60000';
+            ctx.lineWidth = 3;
+            ctx.font = '900 16px Syne, sans-serif';
+            const stampText = orderData.type === 'LOCK' ? 'KILLED' : 'SECURED';
+            ctx.strokeRect(-10, -22, 105, 30);
+            ctx.fillText(stampText, 0, 0);
+            ctx.restore();
+
+            return canvas;
+        }
+
+        function downloadTicket() {
+            triggerHaptic('success');
+            const canvas = document.querySelector("#canvas-container canvas");
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = `RAW-${currentProduct.id}-TICKET.png`;
+                link.href = canvas.toDataURL();
+                link.click();
             }
         }
 
-        // AUTO USERNAME EXTRACTION
-        let tgUsername = "";
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const u = tg.initDataUnsafe.user;
-            tgUsername = u.username ? `@${u.username}` : (u.first_name ? `@${u.first_name}` : "");
-        }
-
-        // UPGRADE: NATIVE TELEGRAM CONFIRMATION POPUP EXPLAINING RULES
-        function showKillshotExplanation() {
-            triggerHaptic('light');
-            try {
-                tg.showPopup({
-                    title: 'THE KILL SHOT PROTOCOL',
-                    message: 'By default, RAW designs are capped at 7 pieces globally.\n\nHowever, any customer can execute a KILL SHOT by adding 2,000 Birr to their order. This immediately shuts down the drop. No other customer can order it from that point forward, and your username is permanently stamped on the locked archive.',
-                    buttons: [{type: 'close', text: 'GOT IT'}]
-                });
-            } catch(e) {
-                alert("KILL SHOT: Pay an extra 2,000 Birr to shut down the drop forever and archive your name on the locked item.");
-            }
-        }
-
-        // UPGRADE: NATIVE PHONE/CONTACT SHARE + AUTOMATIC USERNAME AND LOCATION SYNC
-        function requestNativePhone() {
-            triggerHaptic('select');
-            
-            // Prefill username immediately
-            if (tgUsername) {
-                document.getElementById('lock-name').value = tgUsername;
-            } else {
-                document.getElementById('lock-name').value = "@USERNAME";
-            }
-
-            // Prefill location from storage if saved
-            const locInput = document.getElementById('location');
-            if (!locInput.value) {
-                locInput.value = localStorage.getItem('raw_location') || "Adama";
-            }
-
-            if (tg.requestContact) {
-                tg.requestContact((status, result) => {
-                    if (status) {
-                        let phone = "";
-                        if (result && result.responseUnsafe && result.responseUnsafe.contact) {
-                            phone = result.responseUnsafe.contact.phone_number;
-                            if (result.responseUnsafe.contact.first_name && !tgUsername) {
-                                document.getElementById('lock-name').value = '@' + result.responseUnsafe.contact.first_name;
-                            }
-                        } else if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.phone_number) {
-                            phone = tg.initDataUnsafe.user.phone_number;
-                        }
-                        
-                        if (phone) {
-                            if (!phone.startsWith('+') && !phone.startsWith('0')) phone = '+' + phone;
-                            document.getElementById('phone').value = phone;
-                            localStorage.setItem('raw_phone', phone);
-                            triggerHaptic('success');
-                        }
-                    } else {
-                        loadLocalSaved();
-                    }
-                });
-            } else {
-                loadLocalSaved();
-            }
-        }
-
-        // UPGRADE: 📍 ACCESSIBLE NATIVE GPS ACCELERATOR
-        function requestGpsLocation() {
-            triggerHaptic('select');
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    const gpsString = `GPS: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-                    document.getElementById('location').value = gpsString;
-                    localStorage.setItem('raw_location', gpsString);
-                    triggerHaptic('success');
-                }, (error) => {
-                    alert("Location access denied. Please enable GPS permissions on your device.");
-                });
-            } else {
-                alert("GPS Geolocation is not supported by your device.");
-            }
-        }
-
-        function loadLocalSaved() {
-            const savedPhone = localStorage.getItem('raw_phone');
-            const savedLoc = localStorage.getItem('raw_location') || "Adama";
-            if (savedPhone) document.getElementById('phone').value = savedPhone;
-            document.getElementById('location').value = savedLoc;
-        }
-
-        // FLEX ON TELEGRAM STORY
-        function shareToStory() {
-            triggerHaptic('light');
-            if (tg.shareToStory && currentProduct) {
-                tg.shareToStory(window.location.origin + "/" + currentProduct.image, {
-                    text: `RAW ${currentProduct.id} — STRAIGHT TO THE MEAT.`
-                });
-            } else {
-                alert("Story sharing available on Telegram mobile app.");
-            }
-        }
-
-        // TOGGLE GARMENT SPEC DRAWER
-        function toggleSpecDrawer() {
-            triggerHaptic('select');
-            const content = document.getElementById('drawer-content');
-            const icon = document.getElementById('drawer-icon');
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                icon.innerText = '-';
-            } else {
-                content.style.display = 'none';
-                icon.innerText = '+';
-            }
-        }
-
-        // DYNAMIC CASSETTE IMAGE LOADER (Case & Extension Mismatch Fix)
         const imageDatabase = {
             'RAW 017': 'raw-01',
             'RAW 018': 'raw-02',
@@ -846,7 +477,124 @@
             }
         }
 
-        // DATABASE WITH FIXED IMAGES
+        function openAdminChat() {
+            triggerHaptic('light');
+            try { 
+                tg.openTelegramLink('https://t.me/xthemalcom'); 
+            } catch(e) { 
+                window.location.href = "https://t.me/xthemalcom";
+            }
+        }
+
+        let tgUsername = "";
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const u = tg.initDataUnsafe.user;
+            tgUsername = u.username ? `@${u.username}` : (u.first_name ? `@${u.first_name}` : "");
+        }
+
+        function showKillshotExplanation() {
+            triggerHaptic('light');
+            try {
+                tg.showPopup({
+                    title: 'THE KILL SHOT PROTOCOL',
+                    message: 'By default, RAW designs are capped at 7 pieces globally.\n\nHowever, any customer can execute a KILL SHOT by adding 2,000 Birr to their order. This immediately shuts down the drop. No other customer can order it from that point forward, and your username is permanently stamped on the locked archive.',
+                    buttons: [{type: 'close', text: 'GOT IT'}]
+                });
+            } catch(e) {
+                alert("KILL SHOT: Pay an extra 2,000 Birr to shut down the drop forever.");
+            }
+        }
+
+        function requestNativePhone() {
+            triggerHaptic('select');
+            if (tgUsername) {
+                document.getElementById('lock-name').value = tgUsername;
+            } else {
+                document.getElementById('lock-name').value = "@USERNAME";
+            }
+
+            const locInput = document.getElementById('location');
+            if (!locInput.value) {
+                locInput.value = localStorage.getItem('raw_location') || "Adama";
+            }
+
+            if (tg.requestContact) {
+                tg.requestContact((status, result) => {
+                    if (status) {
+                        let phone = "";
+                        if (result && result.responseUnsafe && result.responseUnsafe.contact) {
+                            phone = result.responseUnsafe.contact.phone_number;
+                            if (result.responseUnsafe.contact.first_name && !tgUsername) {
+                                document.getElementById('lock-name').value = '@' + result.responseUnsafe.contact.first_name;
+                            }
+                        } else if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.phone_number) {
+                            phone = tg.initDataUnsafe.user.phone_number;
+                        }
+                        
+                        if (phone) {
+                            if (!phone.startsWith('+') && !phone.startsWith('0')) phone = '+' + phone;
+                            document.getElementById('phone').value = phone;
+                            localStorage.setItem('raw_phone', phone);
+                            triggerHaptic('success');
+                        }
+                    } else {
+                        loadLocalSaved();
+                    }
+                });
+            } else {
+                loadLocalSaved();
+            }
+        }
+
+        function requestGpsLocation() {
+            triggerHaptic('select');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const gpsString = `GPS: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+                    document.getElementById('location').value = gpsString;
+                    localStorage.setItem('raw_location', gpsString);
+                    triggerHaptic('success');
+                }, (error) => {
+                    alert("Location access denied. Please enable GPS.");
+                });
+            } else {
+                alert("GPS Geolocation is not supported.");
+            }
+        }
+
+        function loadLocalSaved() {
+            const savedPhone = localStorage.getItem('raw_phone');
+            const savedLoc = localStorage.getItem('raw_location') || "Adama";
+            if (savedPhone) document.getElementById('phone').value = savedPhone;
+            document.getElementById('location').value = savedLoc;
+        }
+
+        function shareToStory() {
+            triggerHaptic('light');
+            if (tg.shareToStory && currentProduct) {
+                tg.shareToStory(window.location.origin + "/" + currentProduct.image, {
+                    text: `RAW ${currentProduct.id} — STRAIGHT TO THE MEAT.`
+                });
+            } else {
+                alert("Story sharing available on Telegram mobile app.");
+            }
+        }
+
+        function toggleSpecDrawer() {
+            triggerHaptic('select');
+            const content = document.getElementById('drawer-content');
+            const icon = document.getElementById('drawer-icon');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.innerText = '-';
+            } else {
+                content.style.display = 'none';
+                icon.innerText = '+';
+            }
+        }
+
         let products = [
             { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './raw-01.png', isLive: true, remaining: 7, base: 'raw-01' },
             { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 5, base: 'raw-02' },
@@ -854,7 +602,7 @@
             { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7, base: 'raw-04' }
         ];
 
-        // UPGRADE: REAL-TIME DYNAMIC SCRAPING OF PASSIVE LOCKED Drop URL PARAMS
+        // DYNAMIC STATE DETECTION FROM PY BOT
         const urlParams = new URLSearchParams(window.location.search);
         const lockedParam = urlParams.get('locked');
         if (lockedParam) {
@@ -862,7 +610,7 @@
             locks.forEach(lock => {
                 const parts = lock.split(':');
                 if (parts.length === 2) {
-                    const prodId = parts[0].replace('_', ' '); // RAW_017 -> RAW 017
+                    const prodId = parts[0].replace('_', ' ');
                     const userName = parts[1];
                     const p = products.find(prod => prod.id === prodId);
                     if (p) {
@@ -878,12 +626,8 @@
         let orderType = 'NORMAL'; 
         let selectedSize = 'M';
 
-        // STORAGE LOAD
-        try {
-            loadLocalSaved();
-        } catch(e) {}
+        try { loadLocalSaved(); } catch(e) {}
 
-        // RENDER GRID
         const grid = document.getElementById('product-grid');
         grid.innerHTML = products.map((p, index) => {
             const gone = !p.isLive ? 'gone' : '';
@@ -914,7 +658,7 @@
             currentProduct = products[index];
             if(!currentProduct.isLive) return;
 
-            document.getElementById('modal-img-src').dataset.attempt = ""; // Reset error count
+            document.getElementById('modal-img-src').dataset.attempt = "";
             document.getElementById('modal-img-src').src = currentProduct.image;
             document.getElementById('modal-title').innerText = currentProduct.title;
             document.getElementById('modal-id').innerText = currentProduct.id;
@@ -922,8 +666,8 @@
             
             document.getElementById('main-ui').style.display = 'block';
             document.getElementById('checkout-form').style.display = 'none';
+            document.getElementById('ticket-view').style.display = 'none';
 
-            // NATIVE BACK BUTTON
             try {
                 tg.BackButton.show();
                 tg.BackButton.onClick(closeModal);
@@ -944,7 +688,6 @@
             } catch(e) {}
         }
 
-        // SIZE LOGIC
         function updateSizeUI(size) {
             document.querySelectorAll('.size-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.innerText === size);
@@ -960,7 +703,6 @@
             });
         });
 
-        // CHECKOUT FLOW
         function openCheckout(type) {
             orderType = type;
             
@@ -980,11 +722,11 @@
 
             document.getElementById('main-ui').style.display = 'none';
             document.getElementById('checkout-form').style.display = 'block';
+            document.getElementById('ticket-view').style.display = 'none';
 
-            // TELEGRAM MAIN BUTTON
             try {
                 const price = type === 'LOCK' ? currentProduct.price + 2000 : currentProduct.price;
-                const btnText = type === 'LOCK' ? `CONFIRM KILL SHOT (${price} BIRR)` : `CONFIRM ORDER (${price} BIRR)`;
+                const btnText = `PREPARE TICKET`;
                 
                 tg.MainButton.setText(btnText);
                 tg.MainButton.setParams({
@@ -992,12 +734,13 @@
                     text_color: '#ffffff'
                 });
                 tg.MainButton.show();
-                tg.MainButton.onClick(submitOrder);
+                tg.MainButton.onClick(prepareTicketStage);
             } catch(e) {}
         }
 
-        // SUBMIT ORDER TO BACKEND
-        function submitOrder() {
+        // STAGE: PREVIEW & SAVE TICKET BEFORE TRANSMISSION
+        let finalizedOrderData = null;
+        function prepareTicketStage() {
             const phone = document.getElementById('phone').value;
             const location = document.getElementById('location').value;
             const lockName = document.getElementById('lock-name').value;
@@ -1013,7 +756,6 @@
                 return; 
             }
 
-            // Save values locally first
             localStorage.setItem('raw_phone', phone);
             localStorage.setItem('raw_location', location);
 
@@ -1021,9 +763,7 @@
 
             const finalPrice = orderType === 'LOCK' ? currentProduct.price + 2000 : currentProduct.price;
 
-            try { tg.MainButton.showProgress(); } catch(e) {}
-
-            const orderData = {
+            finalizedOrderData = {
                 id: currentProduct.id,
                 title: currentProduct.title,
                 type: orderType,
@@ -1034,11 +774,61 @@
                 lockName: lockName ? lockName.toUpperCase() : null
             };
 
+            // Switch to Ticket Preview Panel
+            document.getElementById('checkout-form').style.display = 'none';
+            document.getElementById('ticket-view').style.display = 'block';
+            
+            const container = document.getElementById('canvas-container');
+            container.innerHTML = '';
+            const canvas = generateTicket(finalizedOrderData);
+            container.appendChild(canvas);
+
+            try {
+                tg.MainButton.setText("TRANSMIT & ORDER");
+                tg.MainButton.onClick(submitOrder);
+            } catch(e) {}
+        }
+
+        // SUBMIT ORDER TO BACKEND
+        function submitOrder() {
+            if (!finalizedOrderData) return;
+            try { tg.MainButton.showProgress(); } catch(e) {}
+
             setTimeout(() => {
-                tg.sendData(JSON.stringify(orderData));
+                tg.sendData(JSON.stringify(finalizedOrderData));
                 tg.close();
             }, 300);
         }
+
+        // UPDATE: DYNAMIC TIME DECAY TIMELINE PERCENTAGE
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 16);
+        targetDate.setHours(targetDate.getHours() + 4);
+
+        function updateTimers() {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff > 0) {
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                const s = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+
+                document.getElementById('main-timer').innerText = `${d}D ${h}H ${m}M ${s}S — THEN GONE`;
+                document.getElementById('modal-timer').innerText = `${d}D ${h}H ${m}M ${s}S`;
+
+                // Calculate progress
+                const totalDuration = 21 * 24 * 60 * 60 * 1000;
+                const elapsed = totalDuration - diff;
+                const pct = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+                
+                document.getElementById('timeline-fill').style.width = `${pct}%`;
+                document.getElementById('timeline-pct').innerText = `${Math.floor(pct)}% ELAPSED — EXPIRED ITEMS DISAPPEAR FOREVER`;
+            }
+        }
+        setInterval(updateTimers, 1000);
+        updateTimers();
     </script>
 </body>
 </html>
