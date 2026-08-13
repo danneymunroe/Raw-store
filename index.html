@@ -91,7 +91,7 @@
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
-        /* UPGRADE: TIME DECAY TIMELINE */
+        /* TIME DECAY TIMELINE */
         .timeline-container {
             padding: 0.5rem 2rem;
             border-bottom: 2px solid var(--border);
@@ -182,7 +182,7 @@
         .btn-gps-locate { position: absolute; right: 4px; top: 25px; background: var(--black); color: var(--bg); border: none; padding: 0.65rem 0.9rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
         .btn-story { width: 100%; background: transparent; color: var(--black); border: 2px solid var(--border); padding: 0.9rem; margin-top: 1rem; font-family: var(--mono); font-size: 0.8rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
-        /* UPGRADE: TICKET PREVIEW ZONE */
+        /* TICKET PREVIEW ZONE */
         .ticket-view { display: none; text-align: center; border-top: 2px solid var(--border); padding-top: 1.5rem; margin-top: 1rem; }
         .ticket-canvas-container { border: 2px solid var(--border); padding: 10px; background: #ffffff; margin-bottom: 1rem; display: inline-block; width: 100%; max-width: 100%; overflow: hidden; }
         .ticket-canvas-container canvas { width: 100%; height: auto; display: block; }
@@ -217,7 +217,7 @@
         <span style="margin-left:auto;" id="main-timer">16D 04H 21M 09S — THEN GONE</span>
     </div>
 
-    <!-- UPGRADE: TIME DECAY TIMELINE -->
+    <!-- TIME DECAY TIMELINE -->
     <div class="timeline-container">
         <div class="timeline-label">
             <span>TIME DECAY PROGRESSION</span>
@@ -303,11 +303,9 @@
                         <input type="text" id="location" placeholder="Adama / Addis Ababa">
                         <button class="btn-gps-locate" onclick="requestGpsLocation()">📍 GPS LOCATE</button>
                     </div>
-
-                    <button class="btn-story" onclick="shareToStory()">📸 FLEX THIS DROP ON STORY</button>
                 </div>
 
-                <!-- UPGRADE: TICKET DOWNLOAD VIEW -->
+                <!-- TICKET DOWNLOAD VIEW -->
                 <div class="ticket-view" id="ticket-view">
                     <div class="form-title" style="color:var(--red)">TICKET SECURED</div>
                     <div class="ticket-canvas-container" id="canvas-container"></div>
@@ -319,6 +317,11 @@
     </div>
 
     <script>
+        // ----------------------------------------------------
+        // CONFIGURATION: REPLACE THIS WITH YOUR RENDER URL
+        // ----------------------------------------------------
+        const API_URL = "https://your-render-bot-url.onrender.com";
+
         // TELEGRAM SDK INITIALIZATION
         const tg = window.Telegram.WebApp;
         tg.expand();
@@ -354,8 +357,7 @@
             } catch(e){}
         }
 
-        // UPGRADE: HTML5 BRUTALIST CANVAS TICKET GENERATION
-        let generatedTicketBlob = null;
+        // HTML5 CANVAS TICKET GENERATION (INCORPORATES UP-TO-DATE REMAINING QUANTITIES)
         function generateTicket(orderData) {
             const canvas = document.createElement('canvas');
             canvas.width = 600;
@@ -434,17 +436,10 @@
             }
         }
 
-        const imageDatabase = {
-            'RAW 017': 'raw-01',
-            'RAW 018': 'raw-02',
-            'RAW 019': 'raw-03',
-            'RAW 020': 'raw-04'
-        };
-
+        // DYNAMIC IMAGE EXTENSION CHECKER
         function handleImgError(imgElement) {
             const productTitle = imgElement.alt || (currentProduct ? currentProduct.title : '');
-            const productId = currentProduct ? currentProduct.id : '';
-            const baseName = imageDatabase[productId] || 'raw-01';
+            const baseName = currentProduct ? currentProduct.image.replace('./','').replace('.png','') : 'raw-01';
             
             if (!imgElement.dataset.attempt) {
                 imgElement.dataset.attempt = "1";
@@ -480,16 +475,18 @@
         function openAdminChat() {
             triggerHaptic('light');
             try { 
-                tg.openTelegramLink('https://t.me/xthemalcom'); 
+                tg.openTelegramLink('https://t.me/mr_two'); 
             } catch(e) { 
-                window.location.href = "https://t.me/xthemalcom";
+                window.location.href = "https://t.me/mr_two";
             }
         }
 
         let tgUsername = "";
+        let tgUserId = "";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const u = tg.initDataUnsafe.user;
             tgUsername = u.username ? `@${u.username}` : (u.first_name ? `@${u.first_name}` : "");
+            tgUserId = u.id;
         }
 
         function showKillshotExplanation() {
@@ -571,17 +568,6 @@
             document.getElementById('location').value = savedLoc;
         }
 
-        function shareToStory() {
-            triggerHaptic('light');
-            if (tg.shareToStory && currentProduct) {
-                tg.shareToStory(window.location.origin + "/" + currentProduct.image, {
-                    text: `RAW ${currentProduct.id} — STRAIGHT TO THE MEAT.`
-                });
-            } else {
-                alert("Story sharing available on Telegram mobile app.");
-            }
-        }
-
         function toggleSpecDrawer() {
             triggerHaptic('select');
             const content = document.getElementById('drawer-content');
@@ -595,31 +581,27 @@
             }
         }
 
+        // DYNAMIC CATALOG RETRIEVAL FROM PYTHON SERVER WITH FAILSAFE LOCAL DATA
         let products = [
             { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './raw-01.png', isLive: true, remaining: 7, base: 'raw-01' },
-            { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 5, base: 'raw-02' },
-            { id: 'RAW 019', title: 'IN DREAMS', price: 2400, image: './raw-03.png', isLive: false, remaining: 0, base: 'raw-03', lockedBy: '@DANIEL_M' },
+            { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 7, base: 'raw-02' },
+            { id: 'RAW 019', title: 'IN DREAMS', price: 2400, image: './raw-03.png', isLive: true, remaining: 7, base: 'raw-03' },
             { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7, base: 'raw-04' }
         ];
 
-        // DYNAMIC STATE DETECTION FROM PY BOT
-        const urlParams = new URLSearchParams(window.location.search);
-        const lockedParam = urlParams.get('locked');
-        if (lockedParam) {
-            const locks = lockedParam.split(',');
-            locks.forEach(lock => {
-                const parts = lock.split(':');
-                if (parts.length === 2) {
-                    const prodId = parts[0].replace('_', ' ');
-                    const userName = parts[1];
-                    const p = products.find(prod => prod.id === prodId);
-                    if (p) {
-                        p.isLive = false;
-                        p.lockedBy = userName;
-                        p.remaining = 0;
+        async function fetchLiveProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                if (response.ok) {
+                    const dbProducts = await response.json();
+                    if (dbProducts && dbProducts.length > 0) {
+                        products = dbProducts;
                     }
                 }
-            });
+            } catch (e) {
+                console.log("Offline mode: running local product cache");
+            }
+            renderGrid();
         }
 
         let currentProduct = null;
@@ -628,37 +610,52 @@
 
         try { loadLocalSaved(); } catch(e) {}
 
-        const grid = document.getElementById('product-grid');
-        grid.innerHTML = products.map((p, index) => {
-            const gone = !p.isLive ? 'gone' : '';
-            const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
-            const state = p.isLive ? `MAX 7 EXIST` : `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
-            
-            let meter = "[███████] 7/7 REMAINING";
-            if (p.remaining === 5) meter = "[█████░░] 5/7 REMAINING";
-            if (!p.isLive) meter = "[░░░░░░░] VAULTED / 0 LEFT";
+        function renderGrid() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map((p, index) => {
+                const gone = !p.isLive ? 'gone' : '';
+                const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
+                
+                let state = `MAX 7 EXIST`;
+                if (!p.isLive && p.lockedBy) {
+                    state = `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
+                } else if (!p.isLive) {
+                    state = `<span class="locked-by-text">VAULTED</span>`;
+                }
+                
+                let meter = `[███████] ${p.remaining}/7 REMAINING`;
+                if (p.remaining === 6) meter = "[██████░] 6/7 REMAINING";
+                if (p.remaining === 5) meter = "[█████░░] 5/7 REMAINING";
+                if (p.remaining === 4) meter = "[████░░░] 4/7 REMAINING";
+                if (p.remaining === 3) meter = "[███░░░░] 3/7 REMAINING";
+                if (p.remaining === 2) meter = "[██░░░░░] 2/7 REMAINING";
+                if (p.remaining === 1) meter = "[█░░░░░░] 1/7 REMAINING";
+                if (!p.isLive || p.remaining <= 0) meter = "[░░░░░░░] VAULTED / 0 LEFT";
 
-            return `
-            <article class="card ${gone}" onclick="openModal(${index})">
-                <div class="img-wrapper">
-                    ${stamp}
-                    <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${p.base}')">
-                </div>
-                <div class="card-footer">
-                    <div class="card-title">${p.title}</div>
-                    <div class="card-meta"><span>${p.id}</span><span>${p.price} BIRR</span></div>
-                    <div class="scarcity-meter">${meter}</div>
-                    <div class="card-state"><span>${state}</span><span>${p.isLive ? 'LIVE' : 'GONE'}</span></div>
-                </div>
-            </article>`;
-        }).join('');
+                const cleanBase = p.image.replace('./','').replace('.png','').replace('.jpg','');
+
+                return `
+                <article class="card ${gone}" onclick="openModal(${index})">
+                    <div class="img-wrapper">
+                        ${stamp}
+                        <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${cleanBase}')">
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-title">${p.title}</div>
+                        <div class="card-meta"><span>${p.id}</span><span>${p.price} BIRR</span></div>
+                        <div class="scarcity-meter">${meter}</div>
+                        <div class="card-state"><span>${state}</span><span>${p.isLive ? 'LIVE' : 'GONE'}</span></div>
+                    </div>
+                </article>`;
+            }).join('');
+        }
 
         function openModal(index) {
             triggerHaptic('light');
             currentProduct = products[index];
             if(!currentProduct.isLive) return;
 
-            document.getElementById('modal-img-src').dataset.attempt = "";
+            document.getElementById('modal-img-src').dataset.attempt = ""; 
             document.getElementById('modal-img-src').src = currentProduct.image;
             document.getElementById('modal-title').innerText = currentProduct.title;
             document.getElementById('modal-id').innerText = currentProduct.id;
@@ -686,6 +683,8 @@
                 tg.BackButton.hide();
                 tg.MainButton.hide();
             } catch(e) {}
+            
+            fetchLiveProducts(); // refresh grid inventory
         }
 
         function updateSizeUI(size) {
@@ -738,7 +737,6 @@
             } catch(e) {}
         }
 
-        // STAGE: PREVIEW & SAVE TICKET BEFORE TRANSMISSION
         let finalizedOrderData = null;
         function prepareTicketStage() {
             const phone = document.getElementById('phone').value;
@@ -771,10 +769,10 @@
                 price: finalPrice,
                 phone: phone,
                 location: location,
-                lockName: lockName ? lockName.toUpperCase() : null
+                lockName: lockName ? lockName.toUpperCase() : null,
+                userId: tgUserId
             };
 
-            // Switch to Ticket Preview Panel
             document.getElementById('checkout-form').style.display = 'none';
             document.getElementById('ticket-view').style.display = 'block';
             
@@ -784,23 +782,42 @@
             container.appendChild(canvas);
 
             try {
-                tg.MainButton.setText("TRANSMIT & ORDER");
+                tg.MainButton.setText("TRANSMIT ORDER");
                 tg.MainButton.onClick(submitOrder);
             } catch(e) {}
         }
 
-        // SUBMIT ORDER TO BACKEND
-        function submitOrder() {
+        // UPGRADE: TRANSMIT VIA SECURE HTTP INSTEAD OF SENDDATA TO PREVENT FORCED CLOSURE
+        async function submitOrder() {
             if (!finalizedOrderData) return;
             try { tg.MainButton.showProgress(); } catch(e) {}
 
-            setTimeout(() => {
-                tg.sendData(JSON.stringify(finalizedOrderData));
-                tg.close();
-            }, 300);
+            try {
+                const response = await fetch(`${API_URL}/order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(finalizedOrderData)
+                });
+                
+                if (response.ok) {
+                    triggerHaptic('success');
+                    
+                    // Switch MainButton to close manually
+                    tg.MainButton.hideProgress();
+                    tg.MainButton.setText("CLOSE STORE");
+                    tg.MainButton.onClick(() => {
+                        tg.close();
+                    });
+                } else {
+                    tg.MainButton.hideProgress();
+                    alert("RAW server error. Order failed.");
+                }
+            } catch(e) {
+                tg.MainButton.hideProgress();
+                alert("Could not connect to RAW server.");
+            }
         }
 
-        // UPDATE: DYNAMIC TIME DECAY TIMELINE PERCENTAGE
         const targetDate = new Date();
         targetDate.setDate(targetDate.getDate() + 16);
         targetDate.setHours(targetDate.getHours() + 4);
@@ -818,7 +835,6 @@
                 document.getElementById('main-timer').innerText = `${d}D ${h}H ${m}M ${s}S — THEN GONE`;
                 document.getElementById('modal-timer').innerText = `${d}D ${h}H ${m}M ${s}S`;
 
-                // Calculate progress
                 const totalDuration = 21 * 24 * 60 * 60 * 1000;
                 const elapsed = totalDuration - diff;
                 const pct = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
@@ -829,6 +845,9 @@
         }
         setInterval(updateTimers, 1000);
         updateTimers();
+
+        // Boot
+        fetchLiveProducts();
     </script>
 </body>
 </html>
