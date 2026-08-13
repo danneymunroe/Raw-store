@@ -21,7 +21,7 @@
             --bg: #f7f6f2; 
             --black: #0d0d0d; 
             --red: #e60000; 
-            --dim: #888888; 
+            --dim: #777777; 
             --border: #0d0d0d;
             --sans: 'Syne', sans-serif;
             --mono: 'JetBrains Mono', monospace; 
@@ -34,6 +34,23 @@
             -webkit-font-smoothing: antialiased; 
             user-select: none;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* MEMORABLE ELEMENT: WATERMARK BACKGROUND */
+        body::before {
+            content: "RAW";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--sans);
+            font-size: 40vw;
+            font-weight: 900;
+            color: rgba(13, 13, 13, 0.025);
+            pointer-events: none;
+            z-index: 0;
+            letter-spacing: -2vw;
         }
 
         /* HEADER */
@@ -68,10 +85,10 @@
             text-align: right; 
             font-family: var(--mono);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer; 
             text-decoration: underline; 
-            color: var(--black);
+            color: var(--red);
             text-transform: uppercase;
         }
 
@@ -87,6 +104,8 @@
             gap: 1rem; 
             text-transform: uppercase; 
             background: #ffffff;
+            position: relative;
+            z-index: 10;
         }
 
         .status-dot { 
@@ -99,11 +118,38 @@
 
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
+        /* MEMORABLE ELEMENT: INDUSTRIAL SCROLLING MARQUEE TICKER */
+        .marquee-strip {
+            background: var(--black);
+            color: var(--bg);
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.4rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 2px solid var(--border);
+            position: relative;
+            z-index: 10;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 18s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
         /* PRODUCT GRID */
         main.grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             border-bottom: 2px solid var(--border); 
+            position: relative;
+            z-index: 10;
         }
 
         .card { 
@@ -134,7 +180,7 @@
         }
 
         .card.gone .img-wrapper img { 
-            opacity: 0.25; 
+            opacity: 0.2; 
             filter: grayscale(100%); 
         }
 
@@ -151,7 +197,7 @@
             letter-spacing: 3px; 
             pointer-events: none; 
             z-index: 10; 
-            background: rgba(247, 246, 242, 0.85);
+            background: rgba(247, 246, 242, 0.9);
         }
 
         .card img { 
@@ -164,6 +210,16 @@
         .card:hover:not(.gone) img { 
             transform: scale(1.06); 
         }
+
+        /* MEMORABLE ELEMENT: BRUTALIST SCARCITY BAR */
+        .scarcity-meter {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-top: 0.3rem;
+            letter-spacing: 0.5px;
+        }
         
         /* CARD FOOTER */
         .card-footer { 
@@ -171,7 +227,7 @@
             background-color: var(--bg); 
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
 
         .card-title { 
@@ -200,7 +256,6 @@
             justify-content: space-between; 
             color: var(--dim); 
             text-transform: uppercase; 
-            margin-top: 0.2rem;
         }
 
         .locked-by-text { color: var(--red); font-weight: 800; }
@@ -273,7 +328,36 @@
             gap: 0.6rem; 
             text-transform: uppercase;
         }
-        
+
+        /* MEMORABLE ELEMENT: EXPANDABLE GARMENT SPEC DRAWER */
+        .spec-drawer {
+            border: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            background: #ffffff;
+        }
+
+        .spec-drawer-header {
+            padding: 0.8rem 1rem;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            text-transform: uppercase;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .spec-drawer-content {
+            padding: 1rem;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            line-height: 1.7;
+            text-transform: uppercase;
+            color: #333;
+        }
+
         .size-label {
             font-family: var(--mono);
             font-size: 0.75rem;
@@ -434,6 +518,14 @@
         <span style="margin-left:auto;">16D 04H 21M 09S — THEN GONE</span>
     </div>
 
+    <!-- MEMORABLE ELEMENT: INDUSTRIAL MARQUEE TICKER -->
+    <div class="marquee-strip">
+        <div class="marquee-content">
+            /// RAW DROP 017 /// NO ADDITIVES /// ADAMA & ADDIS 48H GUARANTEED DELIVERY /// MAX 7 PIECES PER DESIGN /// KILL SHOT ARCHIVE PROTOCOL ACTIVE /// NO RESTOCKS ///&nbsp;&nbsp;&nbsp;&nbsp;
+            /// RAW DROP 017 /// NO ADDITIVES /// ADAMA & ADDIS 48H GUARANTEED DELIVERY /// MAX 7 PIECES PER DESIGN /// KILL SHOT ARCHIVE PROTOCOL ACTIVE /// NO RESTOCKS ///
+        </div>
+    </div>
+
     <main class="grid" id="product-grid"></main>
 
     <!-- PRODUCT MODAL -->
@@ -450,6 +542,21 @@
                 <div id="main-ui">
                     <div class="m-status"><span class="status-dot"></span> LIVE / AVAILABLE FOR 21 DAYS</div>
                     
+                    <!-- MEMORABLE ELEMENT: EXPANDABLE GARMENT ARCHITECTURE SPECS -->
+                    <div class="spec-drawer">
+                        <div class="spec-drawer-header" onclick="toggleSpecDrawer()">
+                            <span>GARMENT ARCHITECTURE & SPECS</span>
+                            <span id="drawer-icon">+</span>
+                        </div>
+                        <div class="spec-drawer-content" id="drawer-content" style="display:none;">
+                            • FABRIC: 240 GSM HEAVYWEIGHT COMBED COTTON<br>
+                            • WEAVE: HIGH-DENSITY 24-SINGLES COMPACT YARN<br>
+                            • PRINT: DUAL-PASS HIGH-DENSITY SCREEN PRINT<br>
+                            • FIT: OVERSIZED BOX CUT WITH DROPPED SHOULDERS<br>
+                            • CARE: COLD WASH / HANG DRY ONLY
+                        </div>
+                    </div>
+
                     <div class="size-label">SELECT SIZE</div>
                     <div class="size-selector" id="size-selector">
                         <button class="size-btn active">M</button>
@@ -535,13 +642,13 @@
             } catch(e){}
         }
 
-        // 1-CLICK ASK ADMIN CHAT
+        // ASK ADMIN DIRECTED TO @mr_two
         function openAdminChat() {
             triggerHaptic('light');
             try { 
-                tg.openTelegramLink('https://t.me/rawgotitbot'); 
+                tg.openTelegramLink('https://t.me/mr_two'); 
             } catch(e) { 
-                alert("Contact @rawgotitbot"); 
+                window.location.href = "https://t.me/mr_two";
             }
         }
 
@@ -549,18 +656,27 @@
         let tgUsername = "";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const u = tg.initDataUnsafe.user;
-            tgUsername = u.username ? `@${u.username}` : (u.first_name || "");
+            tgUsername = u.username ? `@${u.username}` : (u.first_name ? `@${u.first_name}` : "");
         }
 
-        // FIXED TELEGRAM AUTOFILL PHONE HANDLER
+        // AUTOFILL PHONE + USERNAME HANDLER
         function requestNativePhone() {
             triggerHaptic('select');
+            
+            // Auto pre-fill username immediately if available
+            if (tgUsername) {
+                document.getElementById('lock-name').value = tgUsername;
+            }
+
             if (tg.requestContact) {
                 tg.requestContact((status, result) => {
                     if (status) {
                         let phone = "";
                         if (result && result.responseUnsafe && result.responseUnsafe.contact) {
                             phone = result.responseUnsafe.contact.phone_number;
+                            if (result.responseUnsafe.contact.first_name && !tgUsername) {
+                                document.getElementById('lock-name').value = '@' + result.responseUnsafe.contact.first_name;
+                            }
                         } else if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.phone_number) {
                             phone = tg.initDataUnsafe.user.phone_number;
                         }
@@ -592,12 +708,26 @@
             }
         }
 
-        // DATABASE WITH FIXED RELATIVE IMAGE PATHS
+        // TOGGLE GARMENT SPEC DRAWER
+        function toggleSpecDrawer() {
+            triggerHaptic('select');
+            const content = document.getElementById('drawer-content');
+            const icon = document.getElementById('drawer-icon');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.innerText = '-';
+            } else {
+                content.style.display = 'none';
+                icon.innerText = '+';
+            }
+        }
+
+        // DATABASE WITH EXACT FILENAMES (raw-01.png, raw-02.png, raw-03.png, raw-04.png)
         let products = [
-            { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './input_file_0.png', isLive: true },
-            { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './input_file_3.png', isLive: true },
-            { id: 'RAW 019', title: 'IN DREAMS', price: 2400, image: './input_file_1.png', isLive: false, lockedBy: '@DANIEL_M' },
-            { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './input_file_2.png', isLive: true }
+            { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './raw-01.png', isLive: true, remaining: 7 },
+            { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 5 },
+            { id: 'RAW 019', title: 'IN DREAMS', price: 2400, image: './raw-03.png', isLive: false, remaining: 0, lockedBy: '@DANIEL_M' },
+            { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7 }
         ];
 
         let currentProduct = null;
@@ -624,6 +754,11 @@
             const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
             const state = p.isLive ? `MAX 7 EXIST` : `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
             
+            // Brutalist meter render
+            let meter = "[███████] 7/7 REMAINING";
+            if (p.remaining === 5) meter = "[█████░░] 5/7 REMAINING";
+            if (!p.isLive) meter = "[░░░░░░░] VAULTED / 0 LEFT";
+
             return `
             <article class="card ${gone}" onclick="openModal(${index})">
                 <div class="img-wrapper">
@@ -633,6 +768,7 @@
                 <div class="card-footer">
                     <div class="card-title">${p.title}</div>
                     <div class="card-meta"><span>${p.id}</span><span>${p.price} BIRR</span></div>
+                    <div class="scarcity-meter">${meter}</div>
                     <div class="card-state"><span>${state}</span><span>${p.isLive ? 'LIVE' : 'GONE'}</span></div>
                 </div>
             </article>`;
