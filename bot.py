@@ -139,7 +139,13 @@ class RawHTTPHandler(BaseHTTPRequestHandler):
             
             item_id = order['id']
             price = order['price']
-            user_id = order['userId'] if order['userId'] else ADMIN_CHAT_ID
+            
+            # Safe parser for user id
+            user_id_str = order.get('userId')
+            try:
+                user_id = int(user_id_str) if user_id_str else int(ADMIN_CHAT_ID)
+            except (ValueError, TypeError):
+                user_id = int(ADMIN_CHAT_ID)
 
             # Save the transaction
             db_cursor.execute('''
@@ -391,13 +397,8 @@ if __name__ == '__main__':
     tg_app.add_handler(CommandHandler('inventory', inventory))
     tg_app.add_handler(CommandHandler('blast', blast))
     
-    # Receive data from WebApp
-    tg_app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, web_app_data_handler))
-    
     # Route support bridge messages
     tg_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat_bridge_handler))
 
     print("Bot is live. Waiting for users...")
     tg_app.run_polling()
-
-
