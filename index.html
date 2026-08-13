@@ -118,29 +118,46 @@
 
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
-        /* INDUSTRIAL SCROLLING MARQUEE TICKER */
-        .marquee-strip {
+        /* UPGRADE: INTERACTIVE SMOOTHLY PULSING KILL SHOT BANNER */
+        .killshot-banner {
             background: var(--black);
             color: var(--bg);
             font-family: var(--mono);
             font-size: 0.75rem;
             font-weight: 800;
-            padding: 0.4rem 0;
-            overflow: hidden;
-            white-space: nowrap;
+            padding: 0.7rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
             border-bottom: 2px solid var(--border);
             position: relative;
             z-index: 10;
+            text-transform: uppercase;
+            animation: smoothPulse 3s ease-in-out infinite;
+            transition: background-color 0.2s ease;
         }
 
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 18s linear infinite;
+        .killshot-banner:hover {
+            background-color: var(--red);
         }
 
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
+        .killshot-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-icon {
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: var(--sans);
+        }
+
+        @keyframes smoothPulse {
+            0% { opacity: 0.95; }
+            50% { opacity: 1; }
+            100% { opacity: 0.95; }
         }
 
         /* PRODUCT GRID */
@@ -180,7 +197,7 @@
         }
 
         .card.gone .img-wrapper img { 
-            opacity: 0.2; 
+            opacity: 0.15; 
             filter: grayscale(100%); 
         }
 
@@ -473,6 +490,22 @@
             text-transform: uppercase;
         }
 
+        /* UPGRADE: 📍 GPS LOCATOR AUTOFILL BUTTON */
+        .btn-gps-locate {
+            position: absolute;
+            right: 4px;
+            top: 25px;
+            background: var(--black);
+            color: var(--bg);
+            border: none;
+            padding: 0.65rem 0.9rem;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
         .btn-story {
             width: 100%; 
             background: transparent; 
@@ -518,12 +551,10 @@
         <span style="margin-left:auto;">16D 04H 21M 09S — THEN GONE</span>
     </div>
 
-    <!-- INDUSTRIAL MARQUEE TICKER -->
-    <div class="marquee-strip">
-        <div class="marquee-content">
-            /// RAW DROP 017 /// NO ADDITIVES /// ADAMA & ADDIS 48H GUARANTEED DELIVERY /// MAX 7 PIECES PER DESIGN /// KILL SHOT ARCHIVE PROTOCOL ACTIVE /// NO RESTOCKS ///&nbsp;&nbsp;&nbsp;&nbsp;
-            /// RAW DROP 017 /// NO ADDITIVES /// ADAMA & ADDIS 48H GUARANTEED DELIVERY /// MAX 7 PIECES PER DESIGN /// KILL SHOT ARCHIVE PROTOCOL ACTIVE /// NO RESTOCKS ///
-        </div>
+    <!-- UPGRADE: HIGH CONFIG STATIC BANNER EXPLAINING KILLSHOT -->
+    <div class="killshot-banner" onclick="showKillshotExplanation()">
+        <span class="killshot-text"><span class="status-dot"></span> KILL SHOT ACTIVE: LIMIT EDITION SIZE FOREVER</span>
+        <span class="info-icon">🛈 INFO</span>
     </div>
 
     <main class="grid" id="product-grid"></main>
@@ -594,6 +625,7 @@
                     <div class="input-group">
                         <label>CITY / LOCATION</label>
                         <input type="text" id="location" placeholder="Adama / Addis Ababa">
+                        <button class="btn-gps-locate" onclick="requestGpsLocation()">📍 GPS LOCATE</button>
                     </div>
 
                     <button class="btn-story" onclick="shareToStory()">📸 FLEX THIS DROP ON STORY</button>
@@ -642,6 +674,134 @@
             } catch(e){}
         }
 
+        // ASK ADMIN DIRECTED TO @xthemalcom
+        function openAdminChat() {
+            triggerHaptic('light');
+            try { 
+                tg.openTelegramLink('https://t.me/xthemalcom'); 
+            } catch(e) { 
+                window.location.href = "https://t.me/xthemalcom";
+            }
+        }
+
+        // AUTO USERNAME EXTRACTION
+        let tgUsername = "";
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const u = tg.initDataUnsafe.user;
+            tgUsername = u.username ? `@${u.username}` : (u.first_name ? `@${u.first_name}` : "");
+        }
+
+        // UPGRADE: NATIVE TELEGRAM CONFIRMATION POPUP EXPLAINING RULES
+        function showKillshotExplanation() {
+            triggerHaptic('light');
+            try {
+                tg.showPopup({
+                    title: 'THE KILL SHOT PROTOCOL',
+                    message: 'By default, RAW designs are capped at 7 pieces globally.\n\nHowever, any customer can execute a KILL SHOT by adding 2,000 Birr to their order. This immediately shuts down the drop. No other customer can order it from that point forward, and your username is permanently stamped on the locked archive.',
+                    buttons: [{type: 'close', text: 'GOT IT'}]
+                });
+            } catch(e) {
+                alert("KILL SHOT: Pay an extra 2,000 Birr to shut down the drop forever and archive your name on the locked item.");
+            }
+        }
+
+        // UPGRADE: NATIVE PHONE/CONTACT SHARE + AUTOMATIC USERNAME AND LOCATION SYNC
+        function requestNativePhone() {
+            triggerHaptic('select');
+            
+            // Prefill username immediately
+            if (tgUsername) {
+                document.getElementById('lock-name').value = tgUsername;
+            } else {
+                document.getElementById('lock-name').value = "@USERNAME";
+            }
+
+            // Prefill location from storage if saved
+            const locInput = document.getElementById('location');
+            if (!locInput.value) {
+                locInput.value = localStorage.getItem('raw_location') || "Adama";
+            }
+
+            if (tg.requestContact) {
+                tg.requestContact((status, result) => {
+                    if (status) {
+                        let phone = "";
+                        if (result && result.responseUnsafe && result.responseUnsafe.contact) {
+                            phone = result.responseUnsafe.contact.phone_number;
+                            if (result.responseUnsafe.contact.first_name && !tgUsername) {
+                                document.getElementById('lock-name').value = '@' + result.responseUnsafe.contact.first_name;
+                            }
+                        } else if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.phone_number) {
+                            phone = tg.initDataUnsafe.user.phone_number;
+                        }
+                        
+                        if (phone) {
+                            if (!phone.startsWith('+') && !phone.startsWith('0')) phone = '+' + phone;
+                            document.getElementById('phone').value = phone;
+                            localStorage.setItem('raw_phone', phone);
+                            triggerHaptic('success');
+                        }
+                    } else {
+                        loadLocalSaved();
+                    }
+                });
+            } else {
+                loadLocalSaved();
+            }
+        }
+
+        // UPGRADE: 📍 ACCESSIBLE NATIVE GPS ACCELERATOR
+        function requestGpsLocation() {
+            triggerHaptic('select');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const gpsString = `GPS: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+                    document.getElementById('location').value = gpsString;
+                    localStorage.setItem('raw_location', gpsString);
+                    triggerHaptic('success');
+                }, (error) => {
+                    alert("Location access denied. Please enable GPS permissions on your device.");
+                });
+            } else {
+                alert("GPS Geolocation is not supported by your device.");
+            }
+        }
+
+        function loadLocalSaved() {
+            const savedPhone = localStorage.getItem('raw_phone');
+            const savedLoc = localStorage.getItem('raw_location') || "Adama";
+            if (savedPhone) document.getElementById('phone').value = savedPhone;
+            document.getElementById('location').value = savedLoc;
+        }
+
+        // FLEX ON TELEGRAM STORY
+        function shareToStory() {
+            triggerHaptic('light');
+            if (tg.shareToStory && currentProduct) {
+                tg.shareToStory(window.location.origin + "/" + currentProduct.image, {
+                    text: `RAW ${currentProduct.id} — STRAIGHT TO THE MEAT.`
+                });
+            } else {
+                alert("Story sharing available on Telegram mobile app.");
+            }
+        }
+
+        // TOGGLE GARMENT SPEC DRAWER
+        function toggleSpecDrawer() {
+            triggerHaptic('select');
+            const content = document.getElementById('drawer-content');
+            const icon = document.getElementById('drawer-icon');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.innerText = '-';
+            } else {
+                content.style.display = 'none';
+                icon.innerText = '+';
+            }
+        }
+
         // DYNAMIC CASSETTE IMAGE LOADER (Case & Extension Mismatch Fix)
         const imageDatabase = {
             'RAW 017': 'raw-01',
@@ -686,101 +846,7 @@
             }
         }
 
-        // ASK ADMIN DIRECTED TO @xthemalcom
-        function openAdminChat() {
-            triggerHaptic('light');
-            try { 
-                tg.openTelegramLink('https://t.me/xthemalcom'); 
-            } catch(e) { 
-                window.location.href = "https://t.me/xthemalcom";
-            }
-        }
-
-        // AUTO USERNAME EXTRACTION
-        let tgUsername = "";
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const u = tg.initDataUnsafe.user;
-            tgUsername = u.username ? `@${u.username}` : (u.first_name ? `@${u.first_name}` : "");
-        }
-
-        // ROBUST AUTOFILL PHONE + USERNAME + LOCATION
-        function requestNativePhone() {
-            triggerHaptic('select');
-            
-            // Prefill username immediately
-            if (tgUsername) {
-                document.getElementById('lock-name').value = tgUsername;
-            } else {
-                document.getElementById('lock-name').value = "@USERNAME";
-            }
-
-            // Fallback default location if nothing is saved yet
-            const locInput = document.getElementById('location');
-            if (!locInput.value) {
-                locInput.value = localStorage.getItem('raw_location') || "Adama";
-            }
-
-            if (tg.requestContact) {
-                tg.requestContact((status, result) => {
-                    if (status) {
-                        let phone = "";
-                        if (result && result.responseUnsafe && result.responseUnsafe.contact) {
-                            phone = result.responseUnsafe.contact.phone_number;
-                        } else if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.phone_number) {
-                            phone = tg.initDataUnsafe.user.phone_number;
-                        }
-                        
-                        if (phone) {
-                            if (!phone.startsWith('+') && !phone.startsWith('0')) phone = '+' + phone;
-                            document.getElementById('phone').value = phone;
-                            localStorage.setItem('raw_phone', phone);
-                            try { tg.CloudStorage.setItem('raw_phone', phone); } catch(e){}
-                            triggerHaptic('success');
-                        }
-                    } else {
-                        // Standard load if declined/desktop
-                        loadLocalSaved();
-                    }
-                });
-            } else {
-                loadLocalSaved();
-            }
-        }
-
-        function loadLocalSaved() {
-            const savedPhone = localStorage.getItem('raw_phone');
-            const savedLoc = localStorage.getItem('raw_location') || "Adama";
-            if (savedPhone) document.getElementById('phone').value = savedPhone;
-            document.getElementById('location').value = savedLoc;
-        }
-
-        // FLEX ON TELEGRAM STORY
-        function shareToStory() {
-            triggerHaptic('light');
-            if (tg.shareToStory && currentProduct) {
-                tg.shareToStory(window.location.origin + "/" + currentProduct.image, {
-                    text: `RAW ${currentProduct.id} — STRAIGHT TO THE MEAT.`
-                });
-            } else {
-                alert("Story sharing available on Telegram mobile app.");
-            }
-        }
-
-        // TOGGLE GARMENT SPEC DRAWER
-        function toggleSpecDrawer() {
-            triggerHaptic('select');
-            const content = document.getElementById('drawer-content');
-            const icon = document.getElementById('drawer-icon');
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                icon.innerText = '-';
-            } else {
-                content.style.display = 'none';
-                icon.innerText = '+';
-            }
-        }
-
-        // DATABASE WITH FIXED IMAGES (raw-01.png, raw-02.png, raw-03.png, raw-04.png)
+        // DATABASE WITH FIXED IMAGES
         let products = [
             { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './raw-01.png', isLive: true, remaining: 7, base: 'raw-01' },
             { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 5, base: 'raw-02' },
@@ -788,34 +854,33 @@
             { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7, base: 'raw-04' }
         ];
 
+        // UPGRADE: REAL-TIME DYNAMIC SCRAPING OF PASSIVE LOCKED Drop URL PARAMS
+        const urlParams = new URLSearchParams(window.location.search);
+        const lockedParam = urlParams.get('locked');
+        if (lockedParam) {
+            const locks = lockedParam.split(',');
+            locks.forEach(lock => {
+                const parts = lock.split(':');
+                if (parts.length === 2) {
+                    const prodId = parts[0].replace('_', ' '); // RAW_017 -> RAW 017
+                    const userName = parts[1];
+                    const p = products.find(prod => prod.id === prodId);
+                    if (p) {
+                        p.isLive = false;
+                        p.lockedBy = userName;
+                        p.remaining = 0;
+                    }
+                }
+            });
+        }
+
         let currentProduct = null;
         let orderType = 'NORMAL'; 
         let selectedSize = 'M';
 
-        // STORAGE LOADER (LocalStorage for instant load + CloudStorage backup)
+        // STORAGE LOAD
         try {
             loadLocalSaved();
-            
-            // Backup cloud pull
-            tg.CloudStorage.getItem('raw_phone', (err, value) => {
-                if (value) {
-                    document.getElementById('phone').value = value;
-                    localStorage.setItem('raw_phone', value);
-                }
-            });
-            tg.CloudStorage.getItem('raw_location', (err, value) => {
-                if (value) {
-                    document.getElementById('location').value = value;
-                    localStorage.setItem('raw_location', value);
-                }
-            });
-            tg.CloudStorage.getItem('raw_size', (err, value) => {
-                if (value) { 
-                    selectedSize = value; 
-                    updateSizeUI(value); 
-                    localStorage.setItem('raw_size', value);
-                }
-            });
         } catch(e) {}
 
         // RENDER GRID
@@ -892,7 +957,6 @@
                 selectedSize = e.target.innerText;
                 updateSizeUI(selectedSize);
                 localStorage.setItem('raw_size', selectedSize);
-                try { tg.CloudStorage.setItem('raw_size', selectedSize); } catch(e) {}
             });
         });
 
@@ -952,11 +1016,6 @@
             // Save values locally first
             localStorage.setItem('raw_phone', phone);
             localStorage.setItem('raw_location', location);
-
-            try {
-                tg.CloudStorage.setItem('raw_phone', phone);
-                tg.CloudStorage.setItem('raw_location', location);
-            } catch(e) {}
 
             triggerHaptic('success');
 
