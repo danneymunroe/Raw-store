@@ -71,7 +71,7 @@ if cursor.fetchone()[0] == 0:
     cursor.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", default_products)
     conn.commit()
 
-# Shared Global Reference to Event Loop to process Async Telegram actions from HTTP Thread
+# Shared Global References
 loop = None
 tg_app = None
 
@@ -192,7 +192,10 @@ class RawHTTPHandler(BaseHTTPRequestHandler):
             db_conn.close()
 
             # Async trigger to message the Telegram admin and client from HTTP Thread
-            asyncio.run_coroutine_threadsafe(send_notifications(user_id, alert_text), loop)
+            if loop:
+                asyncio.run_coroutine_threadsafe(send_notifications(user_id, alert_text), loop)
+            else:
+                print("Warning: Event loop not registered yet. Notification skipped.")
 
 
 async def send_notifications(user_id, alert_text):
@@ -366,16 +369,20 @@ async def chat_bridge_handler(update: Update, context: ContextTypes.DEFAULT_TYPE
         await update.message.reply_text("Message received. Admin will reply directly to this thread.")
 
 
-if __name__ == '__main__':
-    # Initialize the main thread Asyncio Event loop
-    loop = asyncio.get_event_loop()
+# --- DYNAMIC EVENT LOOP REGISTRATION IN POST_INIT HOOK ---
+async def post_init(application: Application):
+    """Registers the active loop context natively so threads can run async requests safely"""
+    global loop
+    loop = asyncio.get_running_loop()
 
-    # Spin up background HTTP Server as a Daemon Thread to ensure smooth startup on Render
+
+if __name__ == '__main__':
+    # Spin up background HTTP Service running on port
     http_thread = threading.Thread(target=run_http_server, daemon=True)
     http_thread.start()
 
     print("RAW Telegram Bot is booting up...")
-    tg_app = Application.builder().token(TOKEN).build()
+    tg_app = Application.builder().token(TOKEN).post_init(post_init).build()
 
     # Commands
     tg_app.add_handler(CommandHandler('start', start))
@@ -392,9 +399,4 @@ if __name__ == '__main__':
 
     print("Bot is live. Waiting for users...")
     tg_app.run_polling()
-    
-    # Route chat message stream through bridge
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat_bridge_handler))
 
-    print("Bot is live. Waiting for users...")
-    app.run_polling()
