@@ -37,7 +37,7 @@
             position: relative;
         }
 
-        /* MEMORABLE ELEMENT: WATERMARK BACKGROUND */
+        /* WATERMARK BACKGROUND */
         body::before {
             content: "RAW";
             position: fixed;
@@ -118,7 +118,7 @@
 
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
-        /* MEMORABLE ELEMENT: INDUSTRIAL SCROLLING MARQUEE TICKER */
+        /* INDUSTRIAL SCROLLING MARQUEE TICKER */
         .marquee-strip {
             background: var(--black);
             color: var(--bg);
@@ -211,7 +211,7 @@
             transform: scale(1.06); 
         }
 
-        /* MEMORABLE ELEMENT: BRUTALIST SCARCITY BAR */
+        /* BRUTALIST SCARCITY BAR */
         .scarcity-meter {
             font-family: var(--mono);
             font-size: 0.7rem;
@@ -329,7 +329,7 @@
             text-transform: uppercase;
         }
 
-        /* MEMORABLE ELEMENT: EXPANDABLE GARMENT SPEC DRAWER */
+        /* EXPANDABLE GARMENT SPEC DRAWER */
         .spec-drawer {
             border: 2px solid var(--border);
             margin-bottom: 1.5rem;
@@ -518,7 +518,7 @@
         <span style="margin-left:auto;">16D 04H 21M 09S — THEN GONE</span>
     </div>
 
-    <!-- MEMORABLE ELEMENT: INDUSTRIAL MARQUEE TICKER -->
+    <!-- INDUSTRIAL MARQUEE TICKER -->
     <div class="marquee-strip">
         <div class="marquee-content">
             /// RAW DROP 017 /// NO ADDITIVES /// ADAMA & ADDIS 48H GUARANTEED DELIVERY /// MAX 7 PIECES PER DESIGN /// KILL SHOT ARCHIVE PROTOCOL ACTIVE /// NO RESTOCKS ///&nbsp;&nbsp;&nbsp;&nbsp;
@@ -532,7 +532,7 @@
     <div id="product-modal" class="modal">
         <div class="modal-body">
             <div class="modal-img">
-                <img id="modal-img-src" src="" alt="RAW Object" onerror="this.onerror=null; this.src='https://placehold.co/600x750/0d0d0d/f7f6f2?text=RAW+OBJECT';">
+                <img id="modal-img-src" src="" alt="RAW Object" onerror="handleImgError(this)">
             </div>
             
             <div class="modal-details">
@@ -542,7 +542,7 @@
                 <div id="main-ui">
                     <div class="m-status"><span class="status-dot"></span> LIVE / AVAILABLE FOR 21 DAYS</div>
                     
-                    <!-- MEMORABLE ELEMENT: EXPANDABLE GARMENT ARCHITECTURE SPECS -->
+                    <!-- EXPANDABLE GARMENT ARCHITECTURE SPECS -->
                     <div class="spec-drawer">
                         <div class="spec-drawer-header" onclick="toggleSpecDrawer()">
                             <span>GARMENT ARCHITECTURE & SPECS</span>
@@ -642,13 +642,57 @@
             } catch(e){}
         }
 
-        // ASK ADMIN DIRECTED TO @mr_two
+        // DYNAMIC CASSETTE IMAGE LOADER (Case & Extension Mismatch Fix)
+        const imageDatabase = {
+            'RAW 017': 'raw-01',
+            'RAW 018': 'raw-02',
+            'RAW 019': 'raw-03',
+            'RAW 020': 'raw-04'
+        };
+
+        function handleImgError(imgElement) {
+            const productTitle = imgElement.alt || (currentProduct ? currentProduct.title : '');
+            const productId = currentProduct ? currentProduct.id : '';
+            const baseName = imageDatabase[productId] || 'raw-01';
+            
+            if (!imgElement.dataset.attempt) {
+                imgElement.dataset.attempt = "1";
+                imgElement.src = "./" + baseName + ".PNG";
+            } else if (imgElement.dataset.attempt === "1") {
+                imgElement.dataset.attempt = "2";
+                imgElement.src = "./" + baseName + ".jpg";
+            } else if (imgElement.dataset.attempt === "2") {
+                imgElement.dataset.attempt = "3";
+                imgElement.src = "./" + baseName + ".JPEG";
+            } else {
+                imgElement.onerror = null;
+                imgElement.src = "https://placehold.co/600x750/0d0d0d/f7f6f2?text=" + encodeURIComponent(productTitle);
+            }
+        }
+
+        function handleGridImgError(imgElement, baseName) {
+            if (!imgElement.dataset.attempt) {
+                imgElement.dataset.attempt = "1";
+                imgElement.src = "./" + baseName + ".PNG";
+            } else if (imgElement.dataset.attempt === "1") {
+                imgElement.dataset.attempt = "2";
+                imgElement.src = "./" + baseName + ".jpg";
+            } else if (imgElement.dataset.attempt === "2") {
+                imgElement.dataset.attempt = "3";
+                imgElement.src = "./" + baseName + ".JPEG";
+            } else {
+                imgElement.onerror = null;
+                imgElement.src = "https://placehold.co/600x750/0d0d0d/f7f6f2?text=RAW+OBJECT";
+            }
+        }
+
+        // ASK ADMIN DIRECTED TO @xthemalcom
         function openAdminChat() {
             triggerHaptic('light');
             try { 
-                tg.openTelegramLink('https://t.me/mr_two'); 
+                tg.openTelegramLink('https://t.me/xthemalcom'); 
             } catch(e) { 
-                window.location.href = "https://t.me/mr_two";
+                window.location.href = "https://t.me/xthemalcom";
             }
         }
 
@@ -659,13 +703,21 @@
             tgUsername = u.username ? `@${u.username}` : (u.first_name ? `@${u.first_name}` : "");
         }
 
-        // AUTOFILL PHONE + USERNAME HANDLER
+        // ROBUST AUTOFILL PHONE + USERNAME + LOCATION
         function requestNativePhone() {
             triggerHaptic('select');
             
-            // Auto pre-fill username immediately if available
+            // Prefill username immediately
             if (tgUsername) {
                 document.getElementById('lock-name').value = tgUsername;
+            } else {
+                document.getElementById('lock-name').value = "@USERNAME";
+            }
+
+            // Fallback default location if nothing is saved yet
+            const locInput = document.getElementById('location');
+            if (!locInput.value) {
+                locInput.value = localStorage.getItem('raw_location') || "Adama";
             }
 
             if (tg.requestContact) {
@@ -674,9 +726,6 @@
                         let phone = "";
                         if (result && result.responseUnsafe && result.responseUnsafe.contact) {
                             phone = result.responseUnsafe.contact.phone_number;
-                            if (result.responseUnsafe.contact.first_name && !tgUsername) {
-                                document.getElementById('lock-name').value = '@' + result.responseUnsafe.contact.first_name;
-                            }
                         } else if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.phone_number) {
                             phone = tg.initDataUnsafe.user.phone_number;
                         }
@@ -684,16 +733,25 @@
                         if (phone) {
                             if (!phone.startsWith('+') && !phone.startsWith('0')) phone = '+' + phone;
                             document.getElementById('phone').value = phone;
+                            localStorage.setItem('raw_phone', phone);
                             try { tg.CloudStorage.setItem('raw_phone', phone); } catch(e){}
                             triggerHaptic('success');
-                        } else {
-                            document.getElementById('phone').value = "SHARED VIA TELEGRAM";
                         }
+                    } else {
+                        // Standard load if declined/desktop
+                        loadLocalSaved();
                     }
                 });
             } else {
-                alert("Please type phone manually.");
+                loadLocalSaved();
             }
+        }
+
+        function loadLocalSaved() {
+            const savedPhone = localStorage.getItem('raw_phone');
+            const savedLoc = localStorage.getItem('raw_location') || "Adama";
+            if (savedPhone) document.getElementById('phone').value = savedPhone;
+            document.getElementById('location').value = savedLoc;
         }
 
         // FLEX ON TELEGRAM STORY
@@ -722,28 +780,41 @@
             }
         }
 
-        // DATABASE WITH EXACT FILENAMES (raw-01.png, raw-02.png, raw-03.png, raw-04.png)
+        // DATABASE WITH FIXED IMAGES (raw-01.png, raw-02.png, raw-03.png, raw-04.png)
         let products = [
-            { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './raw-01.png', isLive: true, remaining: 7 },
-            { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 5 },
-            { id: 'RAW 019', title: 'IN DREAMS', price: 2400, image: './raw-03.png', isLive: false, remaining: 0, lockedBy: '@DANIEL_M' },
-            { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7 }
+            { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './raw-01.png', isLive: true, remaining: 7, base: 'raw-01' },
+            { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 5, base: 'raw-02' },
+            { id: 'RAW 019', title: 'IN DREAMS', price: 2400, image: './raw-03.png', isLive: false, remaining: 0, base: 'raw-03', lockedBy: '@DANIEL_M' },
+            { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7, base: 'raw-04' }
         ];
 
         let currentProduct = null;
         let orderType = 'NORMAL'; 
         let selectedSize = 'M';
 
-        // CLOUD STORAGE LOADING
+        // STORAGE LOADER (LocalStorage for instant load + CloudStorage backup)
         try {
+            loadLocalSaved();
+            
+            // Backup cloud pull
             tg.CloudStorage.getItem('raw_phone', (err, value) => {
-                if (value) document.getElementById('phone').value = value;
+                if (value) {
+                    document.getElementById('phone').value = value;
+                    localStorage.setItem('raw_phone', value);
+                }
             });
             tg.CloudStorage.getItem('raw_location', (err, value) => {
-                if (value) document.getElementById('location').value = value;
+                if (value) {
+                    document.getElementById('location').value = value;
+                    localStorage.setItem('raw_location', value);
+                }
             });
             tg.CloudStorage.getItem('raw_size', (err, value) => {
-                if (value) { selectedSize = value; updateSizeUI(value); }
+                if (value) { 
+                    selectedSize = value; 
+                    updateSizeUI(value); 
+                    localStorage.setItem('raw_size', value);
+                }
             });
         } catch(e) {}
 
@@ -754,7 +825,6 @@
             const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
             const state = p.isLive ? `MAX 7 EXIST` : `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
             
-            // Brutalist meter render
             let meter = "[███████] 7/7 REMAINING";
             if (p.remaining === 5) meter = "[█████░░] 5/7 REMAINING";
             if (!p.isLive) meter = "[░░░░░░░] VAULTED / 0 LEFT";
@@ -763,7 +833,7 @@
             <article class="card ${gone}" onclick="openModal(${index})">
                 <div class="img-wrapper">
                     ${stamp}
-                    <img src="${p.image}" alt="${p.title}" onerror="this.onerror=null; this.src='https://placehold.co/600x750/0d0d0d/f7f6f2?text=RAW+OBJECT';">
+                    <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${p.base}')">
                 </div>
                 <div class="card-footer">
                     <div class="card-title">${p.title}</div>
@@ -779,6 +849,7 @@
             currentProduct = products[index];
             if(!currentProduct.isLive) return;
 
+            document.getElementById('modal-img-src').dataset.attempt = ""; // Reset error count
             document.getElementById('modal-img-src').src = currentProduct.image;
             document.getElementById('modal-title').innerText = currentProduct.title;
             document.getElementById('modal-id').innerText = currentProduct.id;
@@ -820,6 +891,7 @@
                 triggerHaptic('select');
                 selectedSize = e.target.innerText;
                 updateSizeUI(selectedSize);
+                localStorage.setItem('raw_size', selectedSize);
                 try { tg.CloudStorage.setItem('raw_size', selectedSize); } catch(e) {}
             });
         });
@@ -876,6 +948,10 @@
                 alert("Archive Name is required to Lock the drop."); 
                 return; 
             }
+
+            // Save values locally first
+            localStorage.setItem('raw_phone', phone);
+            localStorage.setItem('raw_location', location);
 
             try {
                 tg.CloudStorage.setItem('raw_phone', phone);
