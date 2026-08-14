@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAW | PHYSICAL STORE FLOOR</title>
+    <title>RAW | EXHIBITION GALLERY</title>
     
     <!-- TELEGRAM WEB APP SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -18,38 +18,29 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         :root { 
-            --bg: #f7f6f2; 
+            --bg: #0f0e0d; 
+            --linen: #e8e3d8; 
             --black: #0d0d0d; 
             --red: #e60000; 
             --dim: #777777; 
-            --border: #0d0d0d;
+            --border: #1a1a1a;
             --sans: 'Syne', sans-serif;
             --mono: 'JetBrains Mono', monospace; 
         }
 
         body { 
-            background-color: var(--bg); 
-            color: var(--black); 
+            /* DARK BRICK GALLERY WALL BACKGROUND */
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 70%),
+                linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
+                repeating-linear-gradient(0deg, #111 0px, #111 20px, #181818 21px, #181818 40px);
+            color: #f7f6f2; 
             font-family: var(--sans); 
             -webkit-font-smoothing: antialiased; 
             user-select: none;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        /* WATERMARK BACKGROUND */
-        body::before {
-            content: "RAW";
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: var(--sans);
-            font-size: 40vw;
-            font-weight: 900;
-            color: rgba(13, 13, 13, 0.025);
-            pointer-events: none;
-            z-index: 0;
-            letter-spacing: -2vw;
+            min-height: 100vh;
         }
 
         /* HEADER */
@@ -58,19 +49,20 @@
             grid-template-columns: 1fr auto 1fr; 
             align-items: center;
             padding: 1.2rem 2rem; 
-            border-bottom: 2px solid var(--border); 
-            background-color: var(--bg);
+            border-bottom: 2px solid rgba(255,255,255,0.1); 
+            background-color: rgba(15, 14, 13, 0.95);
+            backdrop-filter: blur(10px);
             position: sticky; top: 0; z-index: 50;
         }
 
-        header .logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
-        header .slogan { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        header .logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -1.5px; line-height: 1; color: #fff; }
+        header .slogan { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; }
         header .admin-link { text-align: right; font-family: var(--mono); font-size: 0.75rem; font-weight: 800; cursor: pointer; text-decoration: underline; color: var(--red); text-transform: uppercase; }
 
         /* ANNOUNCEMENT STRIP */
         .announcement { 
             padding: 0.75rem 2rem; 
-            border-bottom: 2px solid var(--border); 
+            border-bottom: 2px solid rgba(255,255,255,0.1); 
             font-family: var(--mono); 
             font-size: 0.8rem; 
             font-weight: 700;
@@ -78,7 +70,8 @@
             align-items: center; 
             gap: 1rem; 
             text-transform: uppercase; 
-            background: #ffffff;
+            background: #151413;
+            color: #ccc;
             position: relative; z-index: 10;
         }
 
@@ -94,21 +87,22 @@
         /* TIME DECAY TIMELINE */
         .timeline-container {
             padding: 0.5rem 2rem;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
             font-family: var(--mono);
             font-size: 0.75rem;
             font-weight: 800;
             background: var(--bg);
+            color: #888;
             position: relative; z-index: 10;
         }
         .timeline-label { display: flex; justify-content: space-between; margin-bottom: 0.3rem; text-transform: uppercase; }
-        .timeline-bar { width: 100%; height: 8px; border: 2px solid var(--border); background: #ffffff; position: relative; }
-        .timeline-fill { height: 100%; background: var(--black); width: 0%; transition: width 0.5s ease-out; }
+        .timeline-bar { width: 100%; height: 6px; border: 1px solid #333; background: #000; position: relative; }
+        .timeline-fill { height: 100%; background: var(--red); width: 0%; transition: width 0.5s ease-out; }
 
         /* KILL SHOT BANNER */
         .killshot-banner {
-            background: var(--black);
-            color: var(--bg);
+            background: #000;
+            color: #fff;
             font-family: var(--mono);
             font-size: 0.75rem;
             font-weight: 800;
@@ -117,7 +111,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
             position: relative; z-index: 10;
             text-transform: uppercase;
             animation: smoothPulse 3s ease-in-out infinite;
@@ -126,262 +120,261 @@
         .killshot-banner:hover { background-color: var(--red); }
         .killshot-text { display: flex; align-items: center; gap: 0.5rem; }
         .info-icon { font-size: 1.1rem; font-weight: bold; font-family: var(--sans); }
-        @keyframes smoothPulse { 0% { opacity: 0.95; } 50% { opacity: 1; } 100% { opacity: 0.95; } }
+        @keyframes smoothPulse { 0% { opacity: 0.9; } 50% { opacity: 1; } 100% { opacity: 0.9; } }
 
-        /* STORE VIEW SWITCHER STRIP */
-        .view-switcher-strip {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 2rem;
-            background: var(--bg);
-            border-bottom: 2px solid var(--border);
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            position: relative; z-index: 10;
-        }
-
-        .view-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 0.4rem 0.8rem;
-            cursor: pointer;
-            font-family: var(--mono);
-            font-weight: 800;
-            font-size: 0.75rem;
-        }
-        .view-btn.active {
-            background: var(--black);
-            color: var(--bg);
-        }
-
-        /* --- PHYSICAL STORE FLOOR / RACK LAYOUT --- */
-        main.store-floor {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            padding: 2rem;
-            max-width: 1200px;
+        /* --- GALLERY EXHIBITION WALL LAYOUT --- */
+        main.gallery-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            padding: 4rem 2rem;
+            max-width: 1400px;
             margin: 0 auto;
             position: relative; z-index: 10;
         }
 
-        .rack-stand {
-            border: 2px solid var(--border);
-            background: #ffffff;
+        /* VERTICAL LINEN CANVAS PANEL */
+        .canvas-panel {
+            background-color: var(--linen);
+            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+            border: 1px solid #c5bfb2;
+            color: var(--black);
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 6px 6px 0px var(--black);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.8),
+                inset 0 0 80px rgba(0, 0, 0, 0.06);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            cursor: pointer;
+            padding-bottom: 1.5rem;
         }
 
-        .rack-stand:hover {
-            transform: translateY(-2px);
-            box-shadow: 10px 10px 0px var(--black);
-        }
-
-        .rack-header {
-            background: var(--bg);
-            border-bottom: 2px solid var(--border);
-            padding: 0.8rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .rack-display-area {
-            position: relative;
-            padding: 3rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 420px;
-            background: radial-gradient(circle, #ffffff 60%, #f4f3ed 100%);
-            border-bottom: 2px solid var(--border);
-            overflow: hidden;
-        }
-
-        /* PHYSICAL RACK HANGER LINE */
-        .rack-rail-bar {
+        /* OVERHEAD GALLERY SPOTLIGHT EFFECT */
+        .canvas-panel::before {
+            content: "";
             position: absolute;
-            top: 0; left: 10%; right: 10%;
-            height: 6px;
-            background: var(--black);
-            border-bottom: 2px solid var(--dim);
+            top: -60px; left: 50%;
+            transform: translateX(-50%);
+            width: 180px; height: 60px;
+            background: radial-gradient(ellipse at bottom, rgba(255,255,255,0.25) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        .rack-display-area img {
-            max-height: 360px;
-            width: auto;
-            max-width: 100%;
+        .canvas-panel:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95);
+        }
+
+        /* WOODEN HANGER GRAPHIC */
+        .hanger-frame {
+            position: relative;
+            width: 100%;
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wooden-hanger-svg {
+            width: 160px;
+            height: auto;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            z-index: 2;
+        }
+
+        /* HANGING SHIRT DISPLAY */
+        .shirt-display {
+            position: relative;
+            margin-top: -30px;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 320px;
+            z-index: 1;
+        }
+
+        .shirt-display img {
+            width: 100%;
+            max-height: 320px;
             object-fit: contain;
-            filter: drop-shadow(0px 15px 12px rgba(0,0,0,0.15));
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.35));
+            transition: transform 0.3s ease;
         }
 
-        .rack-stand:hover img {
+        .canvas-panel:hover .shirt-display img {
             transform: scale(1.04);
         }
 
-        .rack-details {
-            padding: 1.5rem;
+        /* PRINTED METADATA ON CANVAS FABRIC */
+        .canvas-specs {
+            padding: 1rem 1.5rem 0 1.5rem;
+            border-top: 1px dashed rgba(13, 13, 13, 0.3);
+            margin-top: 1rem;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.6;
+            color: #2a2825;
+        }
+
+        .canvas-title {
+            font-family: var(--sans);
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            line-height: 1.05;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+        }
+
+        .canvas-footer {
+            padding: 1rem 1.5rem 0 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--bg);
         }
 
-        .rack-title-box h3 {
-            font-family: var(--sans);
-            font-size: 1.8rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            line-height: 1;
-            margin-bottom: 0.4rem;
-        }
-
-        .rack-meta-text {
+        .canvas-price {
             font-family: var(--mono);
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 800;
             color: var(--black);
-            text-transform: uppercase;
         }
 
-        .rack-action-btn {
+        .canvas-btn {
             background: var(--black);
-            color: var(--bg);
-            border: 2px solid var(--border);
-            padding: 1rem 1.5rem;
+            color: var(--linen);
+            border: none;
+            padding: 0.6rem 1.2rem;
             font-family: var(--sans);
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 900;
             text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color 0.15s ease;
+            letter-spacing: 0.5px;
         }
 
-        .rack-action-btn:hover {
+        /* STICKER ATTACHMENT ANIMATION */
+        .canvas-sticker {
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-15deg);
             background: var(--red);
+            color: #ffffff;
+            font-family: var(--sans);
+            font-weight: 900;
+            font-size: 1.1rem;
+            padding: 0.6rem 1.2rem;
+            border: 3px dashed #ffffff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 25;
+            text-transform: uppercase;
+            animation: stickerSlap 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: none;
         }
 
-        /* --- COMPACT GRID LAYOUT (OPTIONAL MODE) --- */
-        main.grid-mode {
+        @keyframes stickerSlap {
+            0% { transform: scale(3) rotate(30deg); opacity: 0; }
+            100% { transform: scale(1) rotate(-15deg); opacity: 1; }
+        }
+
+        .canvas-panel.gone img { opacity: 0.2; filter: grayscale(100%); }
+
+        /* --- GLASSMORPHISM MODAL & CHECKOUT --- */
+        .modal { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0, 0, 0, 0.85); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 100; 
+            display: none; 
+            flex-direction: column; 
+            overflow-y: auto; 
+            padding: 2rem 1rem 90px 1rem; 
+        }
+
+        /* FROSTED GLASS PANEL */
+        .glass-card {
+            background: rgba(247, 246, 242, 0.88) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border: 2px solid rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8) !important;
+            color: var(--black);
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            border-bottom: 2px solid var(--border);
-            position: relative; z-index: 10;
+            gap: 3rem;
+            padding: 3rem;
+            position: relative;
         }
 
-        .card { 
-            display: flex; 
-            flex-direction: column; 
-            border-right: 2px solid var(--border); 
-            border-bottom: 2px solid var(--border); 
-            cursor: pointer; 
-            position: relative; 
-            background-color: var(--bg); 
-        }
-        .card:nth-child(even) { border-right: none; }
-
-        .img-wrapper { 
-            position: relative; 
-            overflow: hidden; 
+        .modal-img { 
+            border: 2px solid var(--black); 
             background: #ffffff; 
-            flex-grow: 1; 
+            padding: 2rem; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             aspect-ratio: 4/5; 
-            padding: 1.5rem;
-            border-bottom: 2px solid var(--border);
         }
-
-        .card.gone .img-wrapper img, .rack-stand.gone img { opacity: 0.15; filter: grayscale(100%); }
-
-        .stamp { 
-            position: absolute; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) rotate(-12deg); 
-            color: var(--red); 
-            border: 4px solid var(--red); 
-            padding: 0.4rem 1.2rem; 
-            font-family: var(--sans);
-            font-size: 2.5rem; 
-            font-weight: 900; 
-            letter-spacing: 3px; 
-            pointer-events: none; 
-            z-index: 10; 
-            background: rgba(247, 246, 242, 0.9);
-        }
-
-        .scarcity-meter { font-family: var(--mono); font-size: 0.7rem; font-weight: 800; color: var(--black); margin-top: 0.3rem; letter-spacing: 0.5px; }
-        .card-footer { padding: 1.2rem 1.5rem; background-color: var(--bg); display: flex; flex-direction: column; gap: 0.3rem; }
-        .card-title { font-family: var(--sans); font-weight: 900; font-size: 1.15rem; text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.1; }
-        .card-meta { font-family: var(--mono); font-size: 0.8rem; font-weight: 700; display: flex; justify-content: space-between; text-transform: uppercase; }
-        .card-state { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; display: flex; justify-content: space-between; color: var(--dim); text-transform: uppercase; }
-        .locked-by-text { color: var(--red); font-weight: 800; }
-
-        /* MODAL */
-        .modal { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: none; flex-direction: column; overflow-y: auto; padding-bottom: 90px; }
-        .modal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; padding: 2.5rem 3rem; max-width: 1300px; margin: 0 auto; width: 100%; }
-        .modal-img { border: 2px solid var(--border); background: #ffffff; padding: 2.5rem; display: flex; align-items: center; justify-content: center; aspect-ratio: 4/5; }
         .modal-img img { width: 100%; height: 100%; object-fit: contain; }
+
         .m-title { font-family: var(--sans); font-size: 2.8rem; font-weight: 900; line-height: 0.95; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: -1px; }
-        .m-meta { font-family: var(--mono); font-size: 1rem; font-weight: 700; margin-bottom: 1.5rem; text-transform: uppercase; padding-bottom: 1rem; border-bottom: 2px solid var(--border); }
+        .m-meta { font-family: var(--mono); font-size: 1rem; font-weight: 700; margin-bottom: 1.5rem; text-transform: uppercase; padding-bottom: 1rem; border-bottom: 2px solid var(--black); }
         .m-status { font-family: var(--mono); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem; text-transform: uppercase; }
 
-        .spec-drawer { border: 2px solid var(--border); margin-bottom: 1.5rem; background: #ffffff; }
-        .spec-drawer-header { padding: 0.8rem 1rem; font-family: var(--mono); font-size: 0.8rem; font-weight: 800; display: flex; justify-content: space-between; cursor: pointer; text-transform: uppercase; background: var(--bg); border-bottom: 1px solid var(--border); }
+        .spec-drawer { border: 2px solid var(--black); margin-bottom: 1.5rem; background: #ffffff; }
+        .spec-drawer-header { padding: 0.8rem 1rem; font-family: var(--mono); font-size: 0.8rem; font-weight: 800; display: flex; justify-content: space-between; cursor: pointer; text-transform: uppercase; background: var(--linen); border-bottom: 1px solid var(--black); }
         .spec-drawer-content { padding: 1rem; font-family: var(--mono); font-size: 0.75rem; line-height: 1.7; text-transform: uppercase; color: #333; }
 
         .size-label { font-family: var(--mono); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--dim); }
         .size-selector { display: flex; gap: 0.8rem; margin-bottom: 2rem; }
-        .size-btn { border: 2px solid var(--border); background: transparent; padding: 0.8rem 1.4rem; font-family: var(--mono); font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: all 0.15s ease; }
-        .size-btn.active { background: var(--black); color: var(--bg); }
+        .size-btn { border: 2px solid var(--black); background: transparent; padding: 0.8rem 1.4rem; font-family: var(--mono); font-size: 0.9rem; font-weight: 800; cursor: pointer; }
+        .size-btn.active { background: var(--black); color: var(--linen); }
 
         .purchase-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
-        .btn { padding: 1.2rem; font-family: var(--sans); font-weight: 900; font-size: 1.05rem; text-align: center; cursor: pointer; border: 2px solid var(--border); text-transform: uppercase; letter-spacing: 0.5px; transition: transform 0.1s ease; }
-        .btn:active { transform: scale(0.98); }
-        .btn-buy { background: var(--black); color: var(--bg); }
+        .btn { padding: 1.2rem; font-family: var(--sans); font-weight: 900; font-size: 1.05rem; text-align: center; cursor: pointer; border: 2px solid var(--black); text-transform: uppercase; }
+        .btn-buy { background: var(--black); color: var(--linen); }
         .btn-lock { background: transparent; color: var(--red); border-color: var(--red); }
         .subtext { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; margin-top: 0.5rem; color: var(--dim); text-align: center; text-transform: uppercase; }
 
-        .checkout-form { display: none; border-top: 2px solid var(--border); padding-top: 1.5rem; margin-top: 1rem; }
-        .form-title { font-family: var(--sans); font-weight: 900; font-size: 1.4rem; margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: -0.5px; }
+        /* CHECKOUT FORM IN GLASS MODAL */
+        .checkout-form { display: none; border-top: 2px solid var(--black); padding-top: 1.5rem; margin-top: 1rem; }
+        .form-title { font-family: var(--sans); font-weight: 900; font-size: 1.4rem; margin-bottom: 1.2rem; text-transform: uppercase; }
         .input-group { margin-bottom: 1.2rem; position: relative; }
         .input-group label { display: block; font-family: var(--mono); font-size: 0.75rem; font-weight: 800; margin-bottom: 0.4rem; text-transform: uppercase; color: var(--black); }
-        .input-group input { width: 100%; padding: 0.9rem 1rem; border: 2px solid var(--border); background: #ffffff; font-family: var(--mono); font-size: 0.95rem; font-weight: 700; outline: none; color: var(--black); border-radius: 0; }
+        .input-group input { width: 100%; padding: 0.9rem 1rem; border: 2px solid var(--black); background: rgba(255,255,255,0.9); font-family: var(--mono); font-size: 0.95rem; font-weight: 700; outline: none; color: var(--black); }
         .input-group input:focus { border-color: var(--red); }
         .lock-name-group { display: none; }
-        .btn-share-phone { position: absolute; right: 4px; top: 25px; background: var(--black); color: var(--bg); border: none; padding: 0.65rem 0.9rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
-        .btn-gps-locate { position: absolute; right: 4px; top: 25px; background: var(--black); color: var(--bg); border: none; padding: 0.65rem 0.9rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
-        .btn-story { width: 100%; background: transparent; color: var(--black); border: 2px solid var(--border); padding: 0.9rem; margin-top: 1rem; font-family: var(--mono); font-size: 0.8rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        
+        .btn-share-phone, .btn-gps-locate {
+            position: absolute; right: 4px; top: 25px;
+            background: var(--black); color: var(--linen);
+            border: none; padding: 0.65rem 0.9rem;
+            font-family: var(--mono); font-size: 0.7rem; font-weight: 800;
+            cursor: pointer; text-transform: uppercase;
+        }
 
-        /* TICKET PREVIEW ZONE */
-        .ticket-view { display: none; text-align: center; border-top: 2px solid var(--border); padding-top: 1.5rem; margin-top: 1rem; }
-        .ticket-canvas-container { border: 2px solid var(--border); padding: 10px; background: #ffffff; margin-bottom: 1rem; display: inline-block; width: 100%; max-width: 100%; overflow: hidden; }
+        .btn-story { width: 100%; background: transparent; color: var(--black); border: 2px solid var(--black); padding: 0.9rem; margin-top: 1rem; font-family: var(--mono); font-size: 0.8rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+
+        .ticket-view { display: none; text-align: center; border-top: 2px solid var(--black); padding-top: 1.5rem; margin-top: 1rem; }
+        .ticket-canvas-container { border: 2px solid var(--black); padding: 10px; background: #ffffff; margin-bottom: 1rem; display: inline-block; width: 100%; max-width: 100%; overflow: hidden; }
         .ticket-canvas-container canvas { width: 100%; height: auto; display: block; }
 
         @media (max-width: 900px) {
             header { padding: 1rem 1.2rem; }
             header .logo { font-size: 1.5rem; }
             header .slogan { display: none; }
-            .announcement { padding: 0.6rem 1.2rem; font-size: 0.75rem; }
-            main.store-floor { padding: 1rem; gap: 1.5rem; }
-            .rack-display-area { min-height: 320px; padding: 1.5rem; }
-            .rack-details { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .rack-action-btn { width: 100%; text-align: center; }
-            .modal-body { grid-template-columns: 1fr; gap: 2rem; padding: 1.2rem; }
-            .modal-img { padding: 1.5rem; aspect-ratio: 1/1.1; }
+            main.gallery-wall { grid-template-columns: 1fr; padding: 2rem 1rem; gap: 2.5rem; }
+            .glass-card { grid-template-columns: 1fr; padding: 1.5rem; gap: 1.5rem; }
             .m-title { font-size: 2.2rem; }
             .purchase-options { grid-template-columns: 1fr; gap: 1.2rem; }
         }
@@ -397,14 +390,14 @@
 
     <div class="announcement">
         <span class="status-dot"></span> 
-        <span>DROP 017 LIVE</span>
+        <span>EXHIBITION DROP 017</span>
         <span style="margin-left:auto;" id="main-timer">16D 04H 21M 09S — THEN GONE</span>
     </div>
 
     <!-- TIME DECAY TIMELINE -->
     <div class="timeline-container">
         <div class="timeline-label">
-            <span>TIME DECAY PROGRESSION</span>
+            <span>EXHIBITION PROGRESSION</span>
             <span id="timeline-pct">0% ELAPSED</span>
         </div>
         <div class="timeline-bar">
@@ -418,21 +411,12 @@
         <span class="info-icon">🛈 INFO</span>
     </div>
 
-    <!-- VIEW SWITCHER -->
-    <div class="view-switcher-strip">
-        <span>STORE FLOOR // DISPLAY MODE</span>
-        <div>
-            <button class="view-btn active" id="btn-view-rack" onclick="switchView('rack')">👕 PHYSICAL RACK</button>
-            <button class="view-btn" id="btn-view-grid" onclick="switchView('grid')">📄 GRID</button>
-        </div>
-    </div>
+    <!-- GALLERY EXHIBITION WALL -->
+    <main class="gallery-wall" id="gallery-container"></main>
 
-    <!-- MAIN CONTAINER (RACK / GRID MOUNT) -->
-    <main id="store-container" class="store-floor"></main>
-
-    <!-- PRODUCT MODAL -->
+    <!-- GLASSMORPHISM PRODUCT MODAL -->
     <div id="product-modal" class="modal">
-        <div class="modal-body">
+        <div class="glass-card">
             <div class="modal-img">
                 <img id="modal-img-src" src="" alt="RAW Object" onerror="handleImgError(this)">
             </div>
@@ -512,6 +496,17 @@
         </div>
     </div>
 
+    <!-- WOODEN HANGER SVG DEFINITION -->
+    <svg style="display:none;">
+        <symbol id="wooden-hanger" viewBox="0 0 200 80">
+            <!-- Hook -->
+            <path d="M 100 25 C 90 10 110 0 100 0 C 90 0 85 10 95 20 L 98 25" fill="none" stroke="#222" stroke-width="3" stroke-linecap="round"/>
+            <!-- Wooden Body -->
+            <path d="M 10 70 Q 100 30 190 70 Q 100 50 10 70 Z" fill="#b08d57" stroke="#7a5c32" stroke-width="2"/>
+            <path d="M 10 70 Q 100 55 190 70" fill="none" stroke="#523b1e" stroke-width="1.5"/>
+        </symbol>
+    </svg>
+
     <script>
         // CONFIGURATION: REPLACE WITH YOUR RENDER BOT URL WHEN DEPLOYED
         const API_URL = "https://your-render-bot-url.onrender.com";
@@ -521,8 +516,8 @@
         tg.expand();
 
         try {
-            tg.setHeaderColor('#f7f6f2');
-            tg.setBackgroundColor('#f7f6f2');
+            tg.setHeaderColor('#0f0e0d');
+            tg.setBackgroundColor('#0f0e0d');
         } catch(e) {}
 
         const haptic = tg.HapticFeedback;
@@ -800,16 +795,6 @@
             { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7, base: 'raw-04' }
         ];
 
-        let currentView = 'rack'; // 'rack' or 'grid'
-
-        function switchView(view) {
-            triggerHaptic('select');
-            currentView = view;
-            document.getElementById('btn-view-rack').classList.toggle('active', view === 'rack');
-            document.getElementById('btn-view-grid').classList.toggle('active', view === 'grid');
-            renderStore();
-        }
-
         // BACKGROUND SYNC FROM PY BOT (NON-BLOCKING)
         async function fetchLiveProducts() {
             try {
@@ -818,7 +803,7 @@
                     const dbProducts = await response.json();
                     if (dbProducts && dbProducts.length > 0) {
                         products = dbProducts;
-                        renderStore(); // Re-render with live server stock
+                        renderGalleryWall();
                     }
                 }
             } catch (e) {
@@ -827,95 +812,69 @@
         }
 
         let currentProduct = null;
+        let currentIndex = 0;
         let orderType = 'NORMAL'; 
         let selectedSize = 'M';
 
         try { loadLocalSaved(); } catch(e) {}
 
-        // INSTANT STORE RENDERER (PHYSICAL BOUTIQUE FLOOR vs GRID)
-        function renderStore() {
-            const container = document.getElementById('store-container');
+        // --- RENDER GALLERY EXHIBITION WALL WITH LINEN CANVAS PANELS & HANGERS ---
+        function renderGalleryWall() {
+            const container = document.getElementById('gallery-container');
             
-            if (currentView === 'rack') {
-                container.className = 'store-floor';
-                container.innerHTML = products.map((p, index) => {
-                    const gone = !p.isLive ? 'gone' : '';
-                    const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
-                    
-                    let state = `MAX 7 EXIST`;
-                    if (!p.isLive && p.lockedBy) {
-                        state = `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
-                    } else if (!p.isLive) {
-                        state = `<span class="locked-by-text">VAULTED</span>`;
-                    }
-                    
-                    let meter = `[███████] ${p.remaining}/7 IN STOCK`;
-                    if (p.remaining === 6) meter = "[██████░] 6/7 IN STOCK";
-                    if (p.remaining === 5) meter = "[█████░░] 5/7 IN STOCK";
-                    if (p.remaining === 4) meter = "[████░░░] 4/7 IN STOCK";
-                    if (p.remaining === 3) meter = "[███░░░░] 3/7 IN STOCK";
-                    if (p.remaining === 2) meter = "[██░░░░░] 2/7 IN STOCK";
-                    if (p.remaining === 1) meter = "[█░░░░░░] 1/7 IN STOCK";
-                    if (!p.isLive || p.remaining <= 0) meter = "[░░░░░░░] VAULTED / 0 LEFT";
+            container.innerHTML = products.map((p, index) => {
+                const gone = !p.isLive ? 'gone' : '';
+                const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
+                
+                let state = `MAX 7 EXIST`;
+                if (!p.isLive && p.lockedBy) {
+                    state = `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
+                } else if (!p.isLive) {
+                    state = `<span class="locked-by-text">VAULTED</span>`;
+                }
+                
+                let meter = `[███████] ${p.remaining}/7 IN STOCK`;
+                if (p.remaining === 6) meter = "[██████░] 6/7 IN STOCK";
+                if (p.remaining === 5) meter = "[█████░░] 5/7 IN STOCK";
+                if (p.remaining === 4) meter = "[████░░░] 4/7 IN STOCK";
+                if (p.remaining === 3) meter = "[███░░░░] 3/7 IN STOCK";
+                if (p.remaining === 2) meter = "[██░░░░░] 2/7 IN STOCK";
+                if (p.remaining === 1) meter = "[█░░░░░░] 1/7 IN STOCK";
+                if (!p.isLive || p.remaining <= 0) meter = "[░░░░░░░] VAULTED / 0 LEFT";
 
-                    const cleanBase = p.image.replace('./','').replace('.png','').replace('.jpg','');
+                const cleanBase = p.image.replace('./','').replace('.png','').replace('.jpg','');
 
-                    return `
-                    <article class="rack-stand ${gone}" onclick="openModal(${index})">
-                        <div class="rack-header">
-                            <span>RAIL 0${index + 1} // ${p.id}</span>
-                            <span>${p.price} BIRR</span>
-                        </div>
-                        <div class="rack-display-area">
-                            <div class="rack-rail-bar"></div>
-                            ${stamp}
-                            <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${cleanBase}')">
-                        </div>
-                        <div class="rack-details">
-                            <div class="rack-title-box">
-                                <h3>${p.title}</h3>
-                                <div class="rack-meta-text">${state} &nbsp;|&nbsp; ${meter}</div>
-                            </div>
-                            <button class="rack-action-btn">${p.isLive ? 'INSPECT OBJECT' : 'VAULTED'}</button>
-                        </div>
-                    </article>`;
-                }).join('');
-            } else {
-                container.className = 'grid-mode';
-                container.innerHTML = products.map((p, index) => {
-                    const gone = !p.isLive ? 'gone' : '';
-                    const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
-                    
-                    let state = `MAX 7 EXIST`;
-                    if (!p.isLive && p.lockedBy) {
-                        state = `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
-                    } else if (!p.isLive) {
-                        state = `<span class="locked-by-text">VAULTED</span>`;
-                    }
-                    
-                    let meter = `[███████] ${p.remaining}/7 IN STOCK`;
+                // Check if user bought/locked this item in this session to slap animated sticker
+                const stickerHTML = (p.hasSticker) ? `<div class="canvas-sticker">${p.hasSticker}</div>` : '';
 
-                    const cleanBase = p.image.replace('./','').replace('.png','').replace('.jpg','');
-
-                    return `
-                    <article class="card ${gone}" onclick="openModal(${index})">
-                        <div class="img-wrapper">
-                            ${stamp}
-                            <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${cleanBase}')">
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-title">${p.title}</div>
-                            <div class="card-meta"><span>${p.id}</span><span>${p.price} BIRR</span></div>
-                            <div class="scarcity-meter">${meter}</div>
-                            <div class="card-state"><span>${state}</span><span>${p.isLive ? 'LIVE' : 'GONE'}</span></div>
-                        </div>
-                    </article>`;
-                }).join('');
-            }
+                return `
+                <article class="canvas-panel ${gone}" id="canvas-panel-${index}" onclick="openModal(${index})">
+                    ${stamp}
+                    ${stickerHTML}
+                    <div class="hanger-frame">
+                        <svg class="wooden-hanger-svg"><use href="#wooden-hanger"/></svg>
+                    </div>
+                    <div class="shirt-display">
+                        <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${cleanBase}')">
+                    </div>
+                    <div class="canvas-specs">
+                        <div class="canvas-title">${p.title}</div>
+                        <div>CANVAS EXHIBIT #${index + 1} // ${p.id}</div>
+                        <div>240 GSM COMBED COTTON | OVERSIZED CUT</div>
+                        <div>${meter}</div>
+                        <div>STATE: ${state}</div>
+                    </div>
+                    <div class="canvas-footer">
+                        <div class="canvas-price">${p.price} BIRR</div>
+                        <button class="canvas-btn">${p.isLive ? 'EXAMINE' : 'VAULTED'}</button>
+                    </div>
+                </article>`;
+            }).join('');
         }
 
         function openModal(index) {
             triggerHaptic('light');
+            currentIndex = index;
             currentProduct = products[index];
             if(!currentProduct.isLive) return;
 
@@ -1037,6 +996,9 @@
                 userId: tgUserId
             };
 
+            // Attach interactive sticker onto canvas on buy
+            products[currentIndex].hasSticker = orderType === 'LOCK' ? 'KILLED' : 'SECURED';
+
             document.getElementById('checkout-form').style.display = 'none';
             document.getElementById('ticket-view').style.display = 'block';
             
@@ -1065,7 +1027,6 @@
                 if (response.ok) {
                     triggerHaptic('success');
                     
-                    // Switch MainButton to close manually
                     tg.MainButton.hideProgress();
                     tg.MainButton.setText("CLOSE STORE");
                     tg.MainButton.onClick(() => {
@@ -1108,8 +1069,8 @@
         setInterval(updateTimers, 1000);
         updateTimers();
 
-        // INSTANT BOOT - RENDER SYNCHRONOUSLY FIRST
-        renderStore();
+        // INSTANT BOOT - RENDER GALLERY WALL SYNCHRONOUSLY FIRST
+        renderGalleryWall();
         
         // SYNC IN BACKGROUND
         fetchLiveProducts();
