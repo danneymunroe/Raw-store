@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAW | STRAIGHT TO THE MEAT</title>
+    <title>RAW | PHYSICAL STORE FLOOR</title>
     
     <!-- TELEGRAM WEB APP SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -128,16 +128,200 @@
         .info-icon { font-size: 1.1rem; font-weight: bold; font-family: var(--sans); }
         @keyframes smoothPulse { 0% { opacity: 0.95; } 50% { opacity: 1; } 100% { opacity: 0.95; } }
 
-        /* PRODUCT GRID */
-        main.grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--border); position: relative; z-index: 10; }
-        .card { display: flex; flex-direction: column; border-right: 2px solid var(--border); border-bottom: 2px solid var(--border); cursor: pointer; position: relative; background-color: var(--bg); }
+        /* STORE VIEW SWITCHER STRIP */
+        .view-switcher-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2rem;
+            background: var(--bg);
+            border-bottom: 2px solid var(--border);
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            position: relative; z-index: 10;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            cursor: pointer;
+            font-family: var(--mono);
+            font-weight: 800;
+            font-size: 0.75rem;
+        }
+        .view-btn.active {
+            background: var(--black);
+            color: var(--bg);
+        }
+
+        /* --- PHYSICAL STORE FLOOR / RACK LAYOUT --- */
+        main.store-floor {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative; z-index: 10;
+        }
+
+        .rack-stand {
+            border: 2px solid var(--border);
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 6px 6px 0px var(--black);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .rack-stand:hover {
+            transform: translateY(-2px);
+            box-shadow: 10px 10px 0px var(--black);
+        }
+
+        .rack-header {
+            background: var(--bg);
+            border-bottom: 2px solid var(--border);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .rack-display-area {
+            position: relative;
+            padding: 3rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 420px;
+            background: radial-gradient(circle, #ffffff 60%, #f4f3ed 100%);
+            border-bottom: 2px solid var(--border);
+            overflow: hidden;
+        }
+
+        /* PHYSICAL RACK HANGER LINE */
+        .rack-rail-bar {
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 6px;
+            background: var(--black);
+            border-bottom: 2px solid var(--dim);
+        }
+
+        .rack-display-area img {
+            max-height: 360px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0px 15px 12px rgba(0,0,0,0.15));
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .rack-stand:hover img {
+            transform: scale(1.04);
+        }
+
+        .rack-details {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+        }
+
+        .rack-title-box h3 {
+            font-family: var(--sans);
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .rack-meta-text {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--black);
+            text-transform: uppercase;
+        }
+
+        .rack-action-btn {
+            background: var(--black);
+            color: var(--bg);
+            border: 2px solid var(--border);
+            padding: 1rem 1.5rem;
+            font-family: var(--sans);
+            font-size: 1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .rack-action-btn:hover {
+            background: var(--red);
+        }
+
+        /* --- COMPACT GRID LAYOUT (OPTIONAL MODE) --- */
+        main.grid-mode {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 2px solid var(--border);
+            position: relative; z-index: 10;
+        }
+
+        .card { 
+            display: flex; 
+            flex-direction: column; 
+            border-right: 2px solid var(--border); 
+            border-bottom: 2px solid var(--border); 
+            cursor: pointer; 
+            position: relative; 
+            background-color: var(--bg); 
+        }
         .card:nth-child(even) { border-right: none; }
-        .card:nth-last-child(1), .card:nth-last-child(2) { border-bottom: none; }
-        .img-wrapper { position: relative; overflow: hidden; background: #ffffff; flex-grow: 1; display: flex; align-items: center; justify-content: center; aspect-ratio: 4/5; padding: 1.5rem; border-bottom: 2px solid var(--border); }
-        .card.gone .img-wrapper img { opacity: 0.15; filter: grayscale(100%); }
-        .stamp { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-12deg); color: var(--red); border: 4px solid var(--red); padding: 0.4rem 1.2rem; font-family: var(--sans); font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; pointer-events: none; z-index: 10; background: rgba(247, 246, 242, 0.9); }
-        .card img { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; height: 100%; object-fit: contain; }
-        .card:hover:not(.gone) img { transform: scale(1.06); }
+
+        .img-wrapper { 
+            position: relative; 
+            overflow: hidden; 
+            background: #ffffff; 
+            flex-grow: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            aspect-ratio: 4/5; 
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card.gone .img-wrapper img, .rack-stand.gone img { opacity: 0.15; filter: grayscale(100%); }
+
+        .stamp { 
+            position: absolute; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) rotate(-12deg); 
+            color: var(--red); 
+            border: 4px solid var(--red); 
+            padding: 0.4rem 1.2rem; 
+            font-family: var(--sans);
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            letter-spacing: 3px; 
+            pointer-events: none; 
+            z-index: 10; 
+            background: rgba(247, 246, 242, 0.9);
+        }
 
         .scarcity-meter { font-family: var(--mono); font-size: 0.7rem; font-weight: 800; color: var(--black); margin-top: 0.3rem; letter-spacing: 0.5px; }
         .card-footer { padding: 1.2rem 1.5rem; background-color: var(--bg); display: flex; flex-direction: column; gap: 0.3rem; }
@@ -192,10 +376,10 @@
             header .logo { font-size: 1.5rem; }
             header .slogan { display: none; }
             .announcement { padding: 0.6rem 1.2rem; font-size: 0.75rem; }
-            main.grid { grid-template-columns: 1fr; }
-            .card { border-right: none; border-bottom: 2px solid var(--border) !important; }
-            .card-footer { padding: 1rem 1.2rem; }
-            .img-wrapper { aspect-ratio: 1/1.1; padding: 1rem; }
+            main.store-floor { padding: 1rem; gap: 1.5rem; }
+            .rack-display-area { min-height: 320px; padding: 1.5rem; }
+            .rack-details { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .rack-action-btn { width: 100%; text-align: center; }
             .modal-body { grid-template-columns: 1fr; gap: 2rem; padding: 1.2rem; }
             .modal-img { padding: 1.5rem; aspect-ratio: 1/1.1; }
             .m-title { font-size: 2.2rem; }
@@ -228,13 +412,23 @@
         </div>
     </div>
 
-    <!-- HIGH CONFIG STATIC BANNER EXPLAINING KILLSHOT -->
+    <!-- KILLSHOT BANNER -->
     <div class="killshot-banner" onclick="showKillshotExplanation()">
         <span class="killshot-text"><span class="status-dot"></span> KILL SHOT ACTIVE: LIMIT EDITION SIZE FOREVER</span>
         <span class="info-icon">🛈 INFO</span>
     </div>
 
-    <main class="grid" id="product-grid"></main>
+    <!-- VIEW SWITCHER -->
+    <div class="view-switcher-strip">
+        <span>STORE FLOOR // DISPLAY MODE</span>
+        <div>
+            <button class="view-btn active" id="btn-view-rack" onclick="switchView('rack')">👕 PHYSICAL RACK</button>
+            <button class="view-btn" id="btn-view-grid" onclick="switchView('grid')">📄 GRID</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER (RACK / GRID MOUNT) -->
+    <main id="store-container" class="store-floor"></main>
 
     <!-- PRODUCT MODAL -->
     <div id="product-modal" class="modal">
@@ -303,6 +497,8 @@
                         <input type="text" id="location" placeholder="Adama / Addis Ababa">
                         <button class="btn-gps-locate" onclick="requestGpsLocation()">📍 GPS LOCATE</button>
                     </div>
+
+                    <button class="btn-story" onclick="shareToStory()">📸 FLEX THIS DROP ON STORY</button>
                 </div>
 
                 <!-- TICKET DOWNLOAD VIEW -->
@@ -317,9 +513,7 @@
     </div>
 
     <script>
-        // ----------------------------------------------------
-        // CONFIGURATION: REPLACE THIS WITH YOUR RENDER URL
-        // ----------------------------------------------------
+        // CONFIGURATION: REPLACE WITH YOUR RENDER BOT URL WHEN DEPLOYED
         const API_URL = "https://your-render-bot-url.onrender.com";
 
         // TELEGRAM SDK INITIALIZATION
@@ -357,7 +551,7 @@
             } catch(e){}
         }
 
-        // HTML5 CANVAS TICKET GENERATION (INCORPORATES UP-TO-DATE REMAINING QUANTITIES)
+        // TICKET GENERATION
         function generateTicket(orderData) {
             const canvas = document.createElement('canvas');
             canvas.width = 600;
@@ -436,7 +630,13 @@
             }
         }
 
-        // DYNAMIC IMAGE EXTENSION CHECKER
+        const imageDatabase = {
+            'RAW 017': 'raw-01',
+            'RAW 018': 'raw-02',
+            'RAW 019': 'raw-03',
+            'RAW 020': 'raw-04'
+        };
+
         function handleImgError(imgElement) {
             const productTitle = imgElement.alt || (currentProduct ? currentProduct.title : '');
             const baseName = currentProduct ? currentProduct.image.replace('./','').replace('.png','') : 'raw-01';
@@ -568,6 +768,17 @@
             document.getElementById('location').value = savedLoc;
         }
 
+        function shareToStory() {
+            triggerHaptic('light');
+            if (tg.shareToStory && currentProduct) {
+                tg.shareToStory(window.location.origin + "/" + currentProduct.image, {
+                    text: `RAW ${currentProduct.id} — STRAIGHT TO THE MEAT.`
+                });
+            } else {
+                alert("Story sharing available on Telegram mobile app.");
+            }
+        }
+
         function toggleSpecDrawer() {
             triggerHaptic('select');
             const content = document.getElementById('drawer-content');
@@ -581,7 +792,7 @@
             }
         }
 
-        // DYNAMIC CATALOG RETRIEVAL FROM PYTHON SERVER WITH FAILSAFE LOCAL DATA
+        // DYNAMIC CATALOG - INSTANT SYNCHRONOUS INITIALIZATION
         let products = [
             { id: 'RAW 017', title: 'MISERY WINNERS CLUB', price: 2500, image: './raw-01.png', isLive: true, remaining: 7, base: 'raw-01' },
             { id: 'RAW 018', title: 'CREATE YOUR OWN LEGACY', price: 2200, image: './raw-02.png', isLive: true, remaining: 7, base: 'raw-02' },
@@ -589,6 +800,17 @@
             { id: 'RAW 020', title: 'BRAND DEPT.', price: 2500, image: './raw-04.png', isLive: true, remaining: 7, base: 'raw-04' }
         ];
 
+        let currentView = 'rack'; // 'rack' or 'grid'
+
+        function switchView(view) {
+            triggerHaptic('select');
+            currentView = view;
+            document.getElementById('btn-view-rack').classList.toggle('active', view === 'rack');
+            document.getElementById('btn-view-grid').classList.toggle('active', view === 'grid');
+            renderStore();
+        }
+
+        // BACKGROUND SYNC FROM PY BOT (NON-BLOCKING)
         async function fetchLiveProducts() {
             try {
                 const response = await fetch(`${API_URL}/products`);
@@ -596,12 +818,12 @@
                     const dbProducts = await response.json();
                     if (dbProducts && dbProducts.length > 0) {
                         products = dbProducts;
+                        renderStore(); // Re-render with live server stock
                     }
                 }
             } catch (e) {
-                console.log("Offline mode: running local product cache");
+                console.log("Background sync offline. Using active catalog.");
             }
-            renderGrid();
         }
 
         let currentProduct = null;
@@ -610,44 +832,86 @@
 
         try { loadLocalSaved(); } catch(e) {}
 
-        function renderGrid() {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map((p, index) => {
-                const gone = !p.isLive ? 'gone' : '';
-                const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
-                
-                let state = `MAX 7 EXIST`;
-                if (!p.isLive && p.lockedBy) {
-                    state = `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
-                } else if (!p.isLive) {
-                    state = `<span class="locked-by-text">VAULTED</span>`;
-                }
-                
-                let meter = `[███████] ${p.remaining}/7 REMAINING`;
-                if (p.remaining === 6) meter = "[██████░] 6/7 REMAINING";
-                if (p.remaining === 5) meter = "[█████░░] 5/7 REMAINING";
-                if (p.remaining === 4) meter = "[████░░░] 4/7 REMAINING";
-                if (p.remaining === 3) meter = "[███░░░░] 3/7 REMAINING";
-                if (p.remaining === 2) meter = "[██░░░░░] 2/7 REMAINING";
-                if (p.remaining === 1) meter = "[█░░░░░░] 1/7 REMAINING";
-                if (!p.isLive || p.remaining <= 0) meter = "[░░░░░░░] VAULTED / 0 LEFT";
+        // INSTANT STORE RENDERER (PHYSICAL BOUTIQUE FLOOR vs GRID)
+        function renderStore() {
+            const container = document.getElementById('store-container');
+            
+            if (currentView === 'rack') {
+                container.className = 'store-floor';
+                container.innerHTML = products.map((p, index) => {
+                    const gone = !p.isLive ? 'gone' : '';
+                    const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
+                    
+                    let state = `MAX 7 EXIST`;
+                    if (!p.isLive && p.lockedBy) {
+                        state = `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
+                    } else if (!p.isLive) {
+                        state = `<span class="locked-by-text">VAULTED</span>`;
+                    }
+                    
+                    let meter = `[███████] ${p.remaining}/7 IN STOCK`;
+                    if (p.remaining === 6) meter = "[██████░] 6/7 IN STOCK";
+                    if (p.remaining === 5) meter = "[█████░░] 5/7 IN STOCK";
+                    if (p.remaining === 4) meter = "[████░░░] 4/7 IN STOCK";
+                    if (p.remaining === 3) meter = "[███░░░░] 3/7 IN STOCK";
+                    if (p.remaining === 2) meter = "[██░░░░░] 2/7 IN STOCK";
+                    if (p.remaining === 1) meter = "[█░░░░░░] 1/7 IN STOCK";
+                    if (!p.isLive || p.remaining <= 0) meter = "[░░░░░░░] VAULTED / 0 LEFT";
 
-                const cleanBase = p.image.replace('./','').replace('.png','').replace('.jpg','');
+                    const cleanBase = p.image.replace('./','').replace('.png','').replace('.jpg','');
 
-                return `
-                <article class="card ${gone}" onclick="openModal(${index})">
-                    <div class="img-wrapper">
-                        ${stamp}
-                        <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${cleanBase}')">
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-title">${p.title}</div>
-                        <div class="card-meta"><span>${p.id}</span><span>${p.price} BIRR</span></div>
-                        <div class="scarcity-meter">${meter}</div>
-                        <div class="card-state"><span>${state}</span><span>${p.isLive ? 'LIVE' : 'GONE'}</span></div>
-                    </div>
-                </article>`;
-            }).join('');
+                    return `
+                    <article class="rack-stand ${gone}" onclick="openModal(${index})">
+                        <div class="rack-header">
+                            <span>RAIL 0${index + 1} // ${p.id}</span>
+                            <span>${p.price} BIRR</span>
+                        </div>
+                        <div class="rack-display-area">
+                            <div class="rack-rail-bar"></div>
+                            ${stamp}
+                            <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${cleanBase}')">
+                        </div>
+                        <div class="rack-details">
+                            <div class="rack-title-box">
+                                <h3>${p.title}</h3>
+                                <div class="rack-meta-text">${state} &nbsp;|&nbsp; ${meter}</div>
+                            </div>
+                            <button class="rack-action-btn">${p.isLive ? 'INSPECT OBJECT' : 'VAULTED'}</button>
+                        </div>
+                    </article>`;
+                }).join('');
+            } else {
+                container.className = 'grid-mode';
+                container.innerHTML = products.map((p, index) => {
+                    const gone = !p.isLive ? 'gone' : '';
+                    const stamp = !p.isLive ? '<div class="stamp">GONE</div>' : '';
+                    
+                    let state = `MAX 7 EXIST`;
+                    if (!p.isLive && p.lockedBy) {
+                        state = `<span class="locked-by-text">LOCKED BY ${p.lockedBy}</span>`;
+                    } else if (!p.isLive) {
+                        state = `<span class="locked-by-text">VAULTED</span>`;
+                    }
+                    
+                    let meter = `[███████] ${p.remaining}/7 IN STOCK`;
+
+                    const cleanBase = p.image.replace('./','').replace('.png','').replace('.jpg','');
+
+                    return `
+                    <article class="card ${gone}" onclick="openModal(${index})">
+                        <div class="img-wrapper">
+                            ${stamp}
+                            <img src="${p.image}" alt="${p.title}" onerror="handleGridImgError(this, '${cleanBase}')">
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-title">${p.title}</div>
+                            <div class="card-meta"><span>${p.id}</span><span>${p.price} BIRR</span></div>
+                            <div class="scarcity-meter">${meter}</div>
+                            <div class="card-state"><span>${state}</span><span>${p.isLive ? 'LIVE' : 'GONE'}</span></div>
+                        </div>
+                    </article>`;
+                }).join('');
+            }
         }
 
         function openModal(index) {
@@ -684,7 +948,7 @@
                 tg.MainButton.hide();
             } catch(e) {}
             
-            fetchLiveProducts(); // refresh grid inventory
+            fetchLiveProducts(); 
         }
 
         function updateSizeUI(size) {
@@ -787,7 +1051,6 @@
             } catch(e) {}
         }
 
-        // UPGRADE: TRANSMIT VIA SECURE HTTP INSTEAD OF SENDDATA TO PREVENT FORCED CLOSURE
         async function submitOrder() {
             if (!finalizedOrderData) return;
             try { tg.MainButton.showProgress(); } catch(e) {}
@@ -833,7 +1096,6 @@
                 const s = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
 
                 document.getElementById('main-timer').innerText = `${d}D ${h}H ${m}M ${s}S — THEN GONE`;
-                document.getElementById('modal-timer').innerText = `${d}D ${h}H ${m}M ${s}S`;
 
                 const totalDuration = 21 * 24 * 60 * 60 * 1000;
                 const elapsed = totalDuration - diff;
@@ -846,7 +1108,10 @@
         setInterval(updateTimers, 1000);
         updateTimers();
 
-        // Boot
+        // INSTANT BOOT - RENDER SYNCHRONOUSLY FIRST
+        renderStore();
+        
+        // SYNC IN BACKGROUND
         fetchLiveProducts();
     </script>
 </body>
